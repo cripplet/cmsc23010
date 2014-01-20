@@ -3,7 +3,7 @@
 
 #define MAX_WEIGHT 100
 #define MAX_LINE 1000
-#define TEST 0
+#define TEST 1
 
 /**
  * error codes

@@ -31,7 +31,7 @@ int main(int argc, char **argv) {
 	if(TEST == 1) {
 		result = calloc(1, sizeof(int));
 		if(!test_all()) {
-			fail(-1, "main", "One or more unit tests failed - exiting.");
+			fail(ERROR, "main", "One or more unit tests failed - exiting.");
 		} else {
 			notice("main", "All tests have passed, continue booting.");
 		}
@@ -49,10 +49,13 @@ int main(int argc, char **argv) {
 	// additional identifier of the current running execution
 	int id = 0;
 
+	// exit if test_only after unit tests
+	int test_only = 0;
+
 	char input_fn[MAX_LINE], output_fn[MAX_LINE];
 
 	int opt;
-	while((opt = getopt(argc, argv, "n:c:i:")) != -1) {
+	while((opt = getopt(argc, argv, "n:c:i:t")) != -1) {
 		switch(opt) {
 			case 'n':
 				dim = strtol(strdup(optarg), NULL, 10);
@@ -63,10 +66,18 @@ int main(int argc, char **argv) {
 			case 'i':
 				id = strtol(strdup(optarg), NULL, 10);
 				break;
+			case 't':
+				test_only = 1;
+				break;
 			default:
 				usage(argv[0]);
 				fail(ERR_ARGS, "main", "Unknown option provided.");
 		}
+	}
+
+	if(test_only) {
+		notice("main", "Running in test mode -- exiting.");
+		return(0);
 	}
 
 	if(dim <= 0) {
