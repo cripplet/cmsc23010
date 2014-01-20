@@ -1,5 +1,8 @@
 #!/bin/bash
 
+make clean
+make
+
 for ITER in {0..9}
 do
 	for DIM in 16 32 64 128 256 512 1024
