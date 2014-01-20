@@ -1,6 +1,5 @@
 CC=gcc
-# CFLAGS=-Wall -Werror -O3 -std=c99
-CFLAGS=-Wall -Werror -std=c99
+CFLAGS=-Wall -Werror -O3 -std=c99
 LIBS=-pthread
 
 SOURCES=io.c main.c test.c utils.c stopwatch.c fw.c
