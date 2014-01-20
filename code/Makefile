@@ -17,10 +17,6 @@ run: clean
 
 test: clean $(EXECUTABLE)
 	./main -t
-	# python gen_arr.py -n 16
-	# ./main -n 16 -c 0
-	# ./main -n 16 -c 2
-	# diff output_data/out_i0_n16_c0.txt output_data/out_i0_n16_c2.txt
 
 clean:
 	rm -f $(EXECUTABLE) $(OBJECTS) log.txt output_data/*
