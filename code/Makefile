@@ -1,0 +1,26 @@
+CC=gcc
+# CFLAGS=-Wall -Werror -O3 -std=c99
+CFLAGS=-Wall -Werror -std=c99
+LIBS=-pthread
+
+SOURCES=io.c main.c test.c utils.c stopwatch.c fw.c
+
+OBJECTS=$(SOURCES:.c=.o)
+EXECUTABLE=main
+
+all: $(SOURCES) $(EXECUTABLE)
+
+$(EXECUTABLE): $(OBJECTS)
+	$(CC) $(LIBS) $(OBJECTS) -o $@
+
+run: clean $(EXECUTABLE)
+	./run_all.sh
+
+test: clean $(EXECUTABLE)
+	python gen_arr.py -n 16
+	./main -n 16 -c 0
+	./main -n 16 -c 2
+	diff output_data/out_i0_n16_c0.txt output_data/out_i0_n16_c2.txt
+
+clean:
+	rm -f $(EXECUTABLE) $(OBJECTS) log.txt output_data/*
