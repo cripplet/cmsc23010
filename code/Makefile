@@ -12,9 +12,6 @@ all: $(SOURCES) $(EXECUTABLE)
 $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(LIBS) $(OBJECTS) -o $@
 
-run: clean
-	./run_all.sh
-
 test: clean $(EXECUTABLE)
 	./main -t
 
