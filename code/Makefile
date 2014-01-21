@@ -12,14 +12,8 @@ all: $(SOURCES) $(EXECUTABLE)
 $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(LIBS) $(OBJECTS) -o $@
 
-run: clean
-	./run_all.sh
-
 test: clean $(EXECUTABLE)
-	python gen_arr.py -n 16
-	./main -n 16 -c 0
-	./main -n 16 -c 2
-	diff output_data/out_i0_n16_c0.txt output_data/out_i0_n16_c2.txt
+	./main -t
 
 clean:
 	rm -f $(EXECUTABLE) $(OBJECTS) log.txt output_data/*

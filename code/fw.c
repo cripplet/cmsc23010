@@ -9,6 +9,9 @@
 #include "fw.h"
 #include "config.h"
 
+/**
+ * Ad hoc data object to store all global variables, which are passed to all execution threads.
+ */
 struct blob {
 	int * **arr_addr;
 	int dim;
@@ -16,6 +19,11 @@ struct blob {
 	int thread_count;
 };
 
+/**
+ * Data specific to each thread.
+ *
+ * Note that td->shared_data (the address of the blob) should be the same across all execution threads.
+ */
 struct thread_data {
 	int tid;
 	int cur_row;
@@ -27,21 +35,6 @@ struct thread_data *initialize_thread_data(int, struct blob *);
 struct blob *initialize_blob(int * **, int, int);
 
 void *thread_execute(void *);
-
-void *thread_execute(void *args) {
-	struct thread_data *td = (struct thread_data *) args;
-
-	for(int k = 0; k < td->shared_data->dim; k++) {
-		for(int i = td->cur_row; i < td->end_row; i++) {
-			for(int j = 0; j < td->shared_data->dim; j++) {
-				execute(i, j, k, *td->shared_data->arr_addr);
-			}
-		}
-		pthread_barrier_wait(&td->shared_data->fence);
-	}
-	pthread_exit(NULL);
-	return(NULL);
-}
 
 void execute_serial(int dim, int **arr) {
 	for(int k = 0; k < dim; k++) {
@@ -66,6 +59,25 @@ void execute_parallel(int dim, int **arr, int thread_count) {
 	for(int i = 0; i < dim; i++) {
 		pthread_join(handler_list[i], NULL);
 	}
+}
+
+/**
+ * Thread execution handler.
+ */
+void *thread_execute(void *args) {
+	struct thread_data *td = (struct thread_data *) args;
+
+	for(int k = 0; k < td->shared_data->dim; k++) {
+		for(int i = td->cur_row; i < td->end_row; i++) {
+			for(int j = 0; j < td->shared_data->dim; j++) {
+				execute(i, j, k, *td->shared_data->arr_addr);
+			}
+		}
+		pthread_barrier_wait(&td->shared_data->fence);
+	}
+
+	pthread_exit(NULL);
+	return(NULL);
 }
 
 /**

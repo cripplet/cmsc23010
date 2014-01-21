@@ -56,7 +56,7 @@ int **initialize_matrix(int dim, int arr[dim][dim]) {
  * Prints out the usage for the executable.
  */
 void usage(char *exec) {
-	fprintf(stderr, "usage: %s -n <int> [ -c <int> ] [ -i <int> ]\n\t-n\tsize of array; strictly positive\n\t-c\tnumber of threads to execute on; defaults to serial execution; max threads equal to n\n\t-i\tloop ID for multiple executions; default to 0\n", exec);
+	fprintf(stderr, "usage: %s -n <int> [ -c <int> ] [ -i <int> ] [ -t ]\n\t-n\tsize of array; strictly positive\n\t-c\tnumber of threads to execute on; defaults to serial execution; max threads equal to n\n\t-i\tloop ID for multiple executions; default to 0\n\t-t\ttest_only flag -- if set, exit after unit tests\n", exec);
 }
 
 /**

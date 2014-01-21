@@ -33,6 +33,9 @@ void *failed_format(void *);
 void *successful_open(void *);
 void *execute_increment(void *);
 void *execute_stay(void *);
+void *trivial_exec_serial(void *);
+void *trivial_exec_parallel(void *);
+void *compare_serial_parallel_exec(void *);
 
 struct test_data *create_test_data(char* name, void * (*func) (void *), int expected_status) {
 	struct test_data *data_struct = calloc(1, sizeof(struct test_data));
@@ -43,16 +46,20 @@ struct test_data *create_test_data(char* name, void * (*func) (void *), int expe
 }
 
 int run_test(struct test_data *test) {
-	pthread_t *tid = calloc(1, sizeof(pthread_t));
-	pthread_create(tid, NULL, test->func, NULL);
-	pthread_join(*tid, NULL);
+	pthread_t tid;
+	pthread_create(&tid, NULL, test->func, NULL);
+	pthread_join(tid, NULL);
+
 	int success = (*result == test->expected_status);
+
 	if(success) {
 		notice(test->name, "PASSED");
 	} else {
 		notice(test->name, "FAILED");
 	}
+
 	*result = SUCCESS;
+
 	return(success);
 }
 
@@ -62,7 +69,10 @@ int test_all() {
 		run_test(create_test_data("failed_format", failed_format, ERR_FORMAT)) &
 		run_test(create_test_data("successful_open", successful_open, SUCCESS)) &
 		run_test(create_test_data("execute_increment", execute_increment, SUCCESS)) &
-		run_test(create_test_data("execute_stay", execute_stay, SUCCESS))
+		run_test(create_test_data("execute_stay", execute_stay, SUCCESS)) &
+		run_test(create_test_data("trivial_exec_serial", trivial_exec_serial, SUCCESS)) &
+		run_test(create_test_data("trivial_exec_parallel", trivial_exec_parallel, SUCCESS)) &
+		run_test(create_test_data("compare_serial_parallel_exec", compare_serial_parallel_exec, SUCCESS))
 	);
 }
 
@@ -147,5 +157,71 @@ void *execute_stay(void *args) {
 	if(arr[i][j] != 2) {
 		fail(ERROR, "execute_increment", "Array incremented when conditions preclude it from being so.");
 	}
+	return(NULL);
+}
+
+void *trivial_exec_serial(void *args) {
+	int mat[4][4] = {
+		{0, 1, 1, 1},
+		{1, 0, 1, 1},
+		{1, 1, 0, 1},
+		{1, 1, 1, 0}
+	};
+	int **arr = initialize_matrix(4, mat);
+
+	execute_serial(4, arr);
+
+	for(int i = 0; i < 4; i++) {
+		for(int j = 0; j < 4; j++) {
+			if(mat[i][j] != arr[i][j]) {
+				fail(ERROR, "trivial_exec_serial", "Serial execution did not match expected outcome.");
+			}
+		}
+	}
+	return(NULL);
+}
+
+void *trivial_exec_parallel(void *args) {
+	int mat[4][4] = {
+		{0, 1, 1, 1},
+		{1, 0, 1, 1},
+		{1, 1, 0, 1},
+		{1, 1, 1, 0}
+	};
+	int **arr = initialize_matrix(4, mat);
+
+	execute_parallel(4, arr, 4);
+
+	for(int i = 0; i < 4; i++) {
+		for(int j = 0; j < 4; j++) {
+			if(mat[i][j] != arr[i][j]) {
+				fail(ERROR, "trivial_exec_parallel", "Parallel execution did not match expected outcome.");
+			}
+		}
+	}
+	return(NULL);
+}
+
+void *compare_serial_parallel_exec(void *args) {
+	int mat[4][4] = {
+		{0, 1, 4, 6},
+		{1, 0, 4, 8},
+		{4, 4, 0, 1},
+		{6, 8, 1, 0}
+	};
+	int **arr_ser = initialize_matrix(4, mat);
+	int **arr_par = initialize_matrix(4, mat);
+
+	execute_serial(4, arr_ser);
+	execute_parallel(4, arr_par, 4);
+
+	for(int i = 0; i < 4; i++) {
+		for(int j = 0; j < 4; j++) {
+			if(arr_ser[i][j] != arr_par[i][j]) {
+				fail(ERROR, "compare_serial_parallel_exec", "Parallel results did not match serial execution result.");
+			}
+		}
+	}
+
 	return(NULL);
 }
