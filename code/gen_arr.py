@@ -7,7 +7,12 @@ def main():
 	parser.add_argument('-i', type=int, nargs=1, help="loop ID for multiple executions; default to 0")
 	args = parser.parse_args()
 
-	dim = args.n[0]
+	if args.n:
+		dim = args.n[0]
+	else:
+		parser.print_help()
+		return
+
 	if args.i:
 		id = args.i[0]
 	else:
