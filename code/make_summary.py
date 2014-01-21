@@ -2,6 +2,7 @@ from string import split
 def main():
 	fp = open("log.csv", "r")
 
+	base = {}
 	results = {}
 
 	for line in fp.readlines():
@@ -15,8 +16,9 @@ def main():
 	fp.close()
 	fp = open("summary.csv", "w")
 
+	fp.write("DIM\tTHREADS\texecution time\tspeedup\n")
 	for ((dim, thread_count), val) in results.iteritems():
-		fp.write(str(dim) + "\t" + str(thread_count) + "\t" + str(val) + "\n")
+		fp.write(str(dim) + "\t" + str(thread_count) + "\t" + str(val) + "\t" + str(results[(dim, '0')] / val) + "\n")
 	fp.close()
 
 main()
