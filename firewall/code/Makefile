@@ -16,4 +16,4 @@ test: clean $(EXECUTABLE)
 	./$(EXECUTABLE) -t
 
 clean:
-	rm -f $(EXECUTABLE) $(OBJECTS) log.txt output_data/*
+	rm -f $(EXECUTABLE) *.o log.txt output_data/*
