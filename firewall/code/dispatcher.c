@@ -20,6 +20,7 @@ void *execute_dispatcher(void *args) {
 	while(done < d->sources) {
 		done = 0;
 		for(int i = 0; i < d->sources; i++) {
+			// skip over full worker queues and constantly checks for work to be done
 			if(!is_full(d->workers[i]->queue) && d->workers[i]->p_remaining) {
 				Packet_t *p;
 				if(d->uniform) {
@@ -28,6 +29,7 @@ void *execute_dispatcher(void *args) {
 					p = (Packet_t *) getExponentialPacket(&d->pks, i);
 				}
 				enq(d->workers[i]->queue, p);
+				// logs to the worker that we have given it another task
 				d->workers[i]->p_remaining--;
 			}
 			if(d->workers[i]->is_done) {
