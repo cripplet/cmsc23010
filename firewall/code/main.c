@@ -4,11 +4,12 @@
 #include <unistd.h>
 
 #include "serial.h"
+#include "parallel.h"
+#include "serial_queue.h"
 #include "test.h"
 
 #define DEFAULT_NUMBER_OF_ARGS 7
 
-#define ALL 0
 #define SERIAL 1
 #define PARALLEL 2
 #define SERIAL_QUEUE 3
@@ -22,8 +23,10 @@ int main(int argc, char * argv[]) {
 
 	float result = 0.;
 
+	/* run tests */
 	if(argc == 2) {
 		return(!test_all());
+	/* else run the firewall */
 	} else if(argc == DEFAULT_NUMBER_OF_ARGS) {
         	numPackets = atoi(argv[1]);
 		numSources = atoi(argv[2]);
@@ -32,12 +35,19 @@ int main(int argc, char * argv[]) {
 		experimentNumber = (short) atoi(argv[5]);
 		mode = atoi(argv[6]);
 	} else {
-		fprintf(stderr, "usage: %s (TEST | <packets> <sources> <mean> <workload> <aux> <mode>)\n\tmode: 0 ALL 1 SERIAL 2 PARALLEL 3 PARALLEL_QUEUE\n", argv[0]);
+		fprintf(stderr, "usage: %s (TEST | <packets> <sources> <mean> <workload> <id> <mode>)\n\tmode: 0 ALL 1 SERIAL 2 PARALLEL 3 PARALLEL_QUEUE\n", argv[0]);
 		return(0);
 	}
 	switch(mode) {
 		case SERIAL:
 			result = serial_firewall(numPackets, numSources, mean, uniformFlag, experimentNumber);
+			break;
+		case PARALLEL:
+			result = parallel_firewall(numPackets, numSources, mean, uniformFlag, experimentNumber);
+			break;
+		case SERIAL_QUEUE:
+			result = serial_queue_firewall(numPackets, numSources, mean, uniformFlag, experimentNumber);
+			break;
 	}
 	fprintf(stdout, "%s %i %i %li %i %i %i : %f\n", argv[0], numPackets, numSources, mean, uniformFlag, experimentNumber, mode, result);
 	return(0);

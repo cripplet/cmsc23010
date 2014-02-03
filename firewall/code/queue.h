@@ -3,6 +3,8 @@
 
 #include "utils/packetsource.h"
 
+#define Q_SIZE 32
+
 typedef struct q_t {
 	int size;
 	int head;

@@ -9,7 +9,7 @@
 #include "queue.h"
 
 #define DIM 16
-#define Q_SIZE 6
+#define TEST_Q_SIZE 6
 
 typedef struct test_queue_blob {
 	q *queue;
@@ -20,7 +20,7 @@ tq_blob *init_tq_blob() {
 	PacketSource_t *ps = createPacketSource(100, DIM, 0);
 
 	tq_blob *blob = malloc(sizeof(tq_blob));
-	blob->queue = init_q(Q_SIZE);
+	blob->queue = init_q(TEST_Q_SIZE);
 	for(int i = 0; i < DIM; i++) {
 		blob->packets[i] = (Packet_t *) getUniformPacket(ps, 1);
 	}
