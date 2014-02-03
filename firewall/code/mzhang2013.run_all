@@ -2,4 +2,6 @@
 
 # cf. http://bit.ly/1idISBJ
 
-bash $PWD/run_all.sh > $PWD/mzhang2013.run_all.stdout
+CD="/home/mzhang2013/courses/cmsc23010/floyd-warshall/firewall/code"
+
+bash $CD/run_all.sh > $CD/log_data.txt

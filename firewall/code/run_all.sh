@@ -1,7 +1,7 @@
 #!/bin/bash
 
-make clean
-make
+# make clean
+# make
 
 # experiment one
 for ITER in {0..4}
@@ -11,9 +11,10 @@ do
 		for N in 1 8 16
 		do
 			T=`echo "(2 ^ 24) / ($N * $W)" | bc -l`
-			echo "./firewall $T $N $W 1 $ITER 1 >> exp_01.out"
-			./firewall $T $N $W 1 $ITER 1 >> output_data/exp_01.out
-			./firewall $T $N $W 1 $ITER 3 >> output_data/exp_01.out
+			echo "./firewall $T $N $W 1 $ITER 1 #1"
+			./firewall $T $N $W 1 $ITER 1
+			echo "./firewall $T $N $W 3 $ITER 1 #1"
+			./firewall $T $N $W 1 $ITER 3
 		done
 	done
 done
@@ -24,8 +25,8 @@ do
 	for N in 1 2 4 8 16 32
 	do
 		T=`echo "(2 ^ 20) / ($N)" | bc -l`
-		echo "./firewall $T $N 1 1 $ITER 2 >> exp_02.out"
-		./firewall $T $N 1 1 $ITER 2 >> output_data/exp_02.out
+		echo "./firewall $T $N 1 1 $ITER 2 #2"
+		./firewall $T $N 1 1 $ITER 2
 	done
 done
 
@@ -37,8 +38,10 @@ do
 	do
 		for N in 1 2 4 8 16 32 64
 		do
-			echo "./firewall $T $N $W 1 $ITER 2 >> exp_04.out"
-			./firewall $T $N $W 1 $ITER 2 >> output_data/exp_04.out
+			echo "./firewall $T $N $W 1 $ITER 1 #4"
+			./firewall $T $N $W 1 $ITER 1
+			echo "./firewall $T $N $W 1 $ITER 2 #4"
+			./firewall $T $N $W 1 $ITER 2
 		done
 	done
 done
@@ -51,8 +54,10 @@ do
 	do
 		for N in 1 2 4 8 16 32 64
 		do
-			echo "./firewall $T $N $W 0 $ITER 2 >> exp_05.out"
-			./firewall $T $N $W 0 $ITER 2 >> output_data/exp_05.out
+			echo "./firewall $T $N $W 0 $ITER 1 #5"
+			./firewall $T $N $W 0 $ITER 1
+			echo "./firewall $T $N $W 0 $ITER 2 #5"
+			./firewall $T $N $W 0 $ITER 2
 		done
 	done
 done

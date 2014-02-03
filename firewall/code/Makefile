@@ -21,4 +21,4 @@ run: clean $(EXECUTABLE)
 	./$(EXECUTABLE) 100 16 4 0 1 3
 
 clean:
-	rm -f $(EXECUTABLE) *.o output_data/*.out
+	rm -f $(EXECUTABLE) *.o output_data/*.out log.txt *.stdout

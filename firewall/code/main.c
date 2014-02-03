@@ -49,6 +49,8 @@ int main(int argc, char * argv[]) {
 			result = serial_queue_firewall(numPackets, numSources, mean, uniformFlag, experimentNumber);
 			break;
 	}
-	fprintf(stdout, "%s %i %i %li %i %i %i : %f\n", argv[0], numPackets, numSources, mean, uniformFlag, experimentNumber, mode, result);
+	FILE *fp = fopen("log.txt", "a");
+	fprintf(fp, "%s %i %i %li %i %i %i : %f\n", argv[0], numPackets, numSources, mean, uniformFlag, experimentNumber, mode, result);
+	fclose(fp);
 	return(0);
 }
