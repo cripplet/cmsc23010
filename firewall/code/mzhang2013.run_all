@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# cf. http://bit.ly/1idISBJ
+
+bash $PWD/run_all.sh > $PWD/mzhang2013.run_all.stdout
