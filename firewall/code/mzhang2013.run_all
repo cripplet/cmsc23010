@@ -4,4 +4,4 @@
 
 CD="/home/mzhang2013/courses/cmsc23010/cmsc23010/firewall/code"
 
-bash $CD/run_all.sh > $CD/log_data.txt
+bash $CD/run_all.sh > $CD/out.txt
