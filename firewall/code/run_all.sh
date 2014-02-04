@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd /home/mzhang2013/courses/cmsc23010/floyd-warshall/firewall/code
+cd /home/mzhang2013/courses/cmsc23010/cmsc23010/firewall/code
 
 # make clean
 # make

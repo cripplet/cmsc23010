@@ -2,6 +2,6 @@
 
 # cf. http://bit.ly/1idISBJ
 
-CD="/home/mzhang2013/courses/cmsc23010/floyd-warshall/firewall/code"
+CD="/home/mzhang2013/courses/cmsc23010/cmsc23010/firewall/code"
 
 bash $CD/run_all.sh > $CD/log_data.txt
