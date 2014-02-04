@@ -1,10 +1,13 @@
 #ifndef WORKER_H
 #define WORKER_H
 
+#include "utils/stopwatch.h"
+
 #include "queue.h"
 
 typedef struct worker_t {
 	long fingerprint;
+	StopWatch_t watch;
 	int p_remaining;
 	float time;
 	q *queue;

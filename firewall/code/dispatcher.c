@@ -47,6 +47,7 @@ void *execute_dispatcher(void *args) {
 	stopTimer(&watch);
 	d->folded_time = getElapsedTime(&watch);
 
+	// get the spin wait time of the workers
 	for(int i = 0; i < d->sources; i++) {
 		d->time += d->workers[i]->time;
 	}

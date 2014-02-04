@@ -22,7 +22,11 @@ worker *init_worker(int p_remaining, int q_size) {
  * Spin-waits while the queue is empty.
  */
 long process_packet(worker *w) {
+	startTimer(&w->watch);
 	while(is_empty(w->queue));
+	stopTimer(&w->watch);
+
+	w->time += getElapsedTime(&w->watch);
 
 	Packet_t *pkt = deq(w->queue);
 	return(getFingerprint(pkt->iterations, pkt->seed));

@@ -34,7 +34,7 @@ int main(int argc, char * argv[]) {
 		experimentNumber = (short) atoi(argv[5]);
 		mode = atoi(argv[6]);
 	} else {
-		fprintf(stderr, "usage: %s (TEST | <packets> <sources> <mean> <workload> <id> <mode>)\n\tmode: 0 ALL 1 SERIAL 2 PARALLEL 3 PARALLEL_QUEUE\n", argv[0]);
+		fprintf(stderr, "usage: %s (TEST | <packets> <sources> <mean> <workload> <id> <mode>)\n\tmode: 1 SERIAL 2 PARALLEL 3 SERIAL_QUEUE\n", argv[0]);
 		return(0);
 	}
 	switch(mode) {
@@ -50,7 +50,7 @@ int main(int argc, char * argv[]) {
 	}
 	FILE *fp = fopen("log.txt", "a");
 	if(mode == PARALLEL) {
-		fprintf(fp, "%s\t%i\t%i\t%li\t%i\t%i\t%i\t%f\n", argv[0], numPackets, numSources, mean, uniformFlag, experimentNumber, mode, r->folded_time);
+		fprintf(fp, "%s\t%i\t%i\t%li\t%i\t%i\t%i\t%f\t%f\n", argv[0], numPackets, numSources, mean, uniformFlag, experimentNumber, mode, r->folded_time, r->time);
 	} else {
 		fprintf(fp, "%s\t%i\t%i\t%li\t%i\t%i\t%i\t%f\n", argv[0], numPackets, numSources, mean, uniformFlag, experimentNumber, mode, r->time);
 	}
