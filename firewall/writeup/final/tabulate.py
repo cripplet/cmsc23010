@@ -29,6 +29,11 @@ for i in xrange(len(out_lines)):
 fp = open('result.csv', 'a')
 
 for (key, val) in result.iteritems():
-	fp.write("\t".join(str(x) for x in key) + "\t" + str(val) + "\n")
+	(exp, T, n, W, uniform, mode) = key
+	if not exp == '2':
+		speedup = result[(exp, T, n, W, uniform, '1')] / result[key]
+	else:
+		speedup = 1
+	fp.write("\t".join(str(x) for x in key) + "\t" + str(val) + "\t" + str(speedup) + "\n")
 
 fp.close()
