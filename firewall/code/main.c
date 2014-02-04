@@ -7,6 +7,7 @@
 #include "parallel.h"
 #include "serial_queue.h"
 #include "test.h"
+#include "result.h"
 
 #define DEFAULT_NUMBER_OF_ARGS 7
 
@@ -14,14 +15,12 @@
 #define PARALLEL 2
 #define SERIAL_QUEUE 3
 
-float serial_firewall(const int, const int, const long, const int, const short);
-
 int main(int argc, char * argv[]) {
        	int numPackets, numSources, uniformFlag, mode;
 	long mean;
 	short experimentNumber;
 
-	float result = 0.;
+	result *r = NULL;
 
 	/* run tests */
 	if(argc == 2) {
@@ -40,17 +39,24 @@ int main(int argc, char * argv[]) {
 	}
 	switch(mode) {
 		case SERIAL:
-			result = serial_firewall(numPackets, numSources, mean, uniformFlag, experimentNumber);
+			r = serial_firewall(numPackets, numSources, mean, uniformFlag, experimentNumber);
 			break;
 		case PARALLEL:
-			result = parallel_firewall(numPackets, numSources, mean, uniformFlag, experimentNumber);
+			r = parallel_firewall(numPackets, numSources, mean, uniformFlag, experimentNumber);
 			break;
 		case SERIAL_QUEUE:
-			result = serial_queue_firewall(numPackets, numSources, mean, uniformFlag, experimentNumber);
+			r = serial_queue_firewall(numPackets, numSources, mean, uniformFlag, experimentNumber);
 			break;
 	}
 	FILE *fp = fopen("log.txt", "a");
-	fprintf(fp, "%s %i %i %li %i %i %i : %f\n", argv[0], numPackets, numSources, mean, uniformFlag, experimentNumber, mode, result);
+	if(mode == PARALLEL) {
+		fprintf(fp, "%s\t%i\t%i\t%li\t%i\t%i\t%i\t%f\n", argv[0], numPackets, numSources, mean, uniformFlag, experimentNumber, mode, r->folded_time);
+	} else {
+		fprintf(fp, "%s\t%i\t%i\t%li\t%i\t%i\t%i\t%f\n", argv[0], numPackets, numSources, mean, uniformFlag, experimentNumber, mode, r->time);
+	}
 	fclose(fp);
+
+	free(r);
+
 	return(0);
 }

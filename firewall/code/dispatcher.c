@@ -1,5 +1,7 @@
 #include <pthread.h>
 
+#include "utils/stopwatch.h"
+
 #include "dispatcher.h"
 
 dispatcher *init_dispatcher(int sources, worker **workers, PacketSource_t pks, int uniform_flag) {
@@ -8,6 +10,7 @@ dispatcher *init_dispatcher(int sources, worker **workers, PacketSource_t pks, i
 	d->sources = sources;
 	d->workers = workers;
 	d->time = 0;
+	d->folded_time = 0;
 	d->uniform = uniform_flag;
 
 	return(d);
@@ -16,6 +19,9 @@ dispatcher *init_dispatcher(int sources, worker **workers, PacketSource_t pks, i
 void *execute_dispatcher(void *args) {
 	dispatcher *d = args;
 	int done = 0;
+
+	StopWatch_t watch;
+	startTimer(&watch);
 
 	while(done < d->sources) {
 		done = 0;
@@ -37,6 +43,9 @@ void *execute_dispatcher(void *args) {
 			}
 		}
 	}
+
+	stopTimer(&watch);
+	d->folded_time = getElapsedTime(&watch);
 
 	for(int i = 0; i < d->sources; i++) {
 		d->time += d->workers[i]->time;

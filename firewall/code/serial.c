@@ -10,7 +10,7 @@
 
 #include "serial.h"
 
-float serial_firewall(int numPackets, int numSources, long mean, int uniformFlag, short experimentNumber) {
+result *serial_firewall(int numPackets, int numSources, long mean, int uniformFlag, short experimentNumber) {
 	PacketSource_t * packetSource = createPacketSource(mean, numSources, experimentNumber);
 	StopWatch_t watch;
 	long fingerprint = 0;
@@ -34,5 +34,8 @@ float serial_firewall(int numPackets, int numSources, long mean, int uniformFlag
 		}
 		stopTimer(&watch);
 	}
-	return(getElapsedTime(&watch));
+
+	result *r = init_result();
+	r->time = getElapsedTime(&watch);
+	return(r);
 }

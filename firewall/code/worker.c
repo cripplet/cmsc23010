@@ -23,6 +23,7 @@ worker *init_worker(int p_remaining, int q_size) {
  */
 long process_packet(worker *w) {
 	while(is_empty(w->queue));
+
 	Packet_t *pkt = deq(w->queue);
 	return(getFingerprint(pkt->iterations, pkt->seed));
 }
@@ -31,9 +32,6 @@ long process_packet(worker *w) {
  * Main worker thread -- procesess w->p_remaining packets
  */
 void *execute_worker(void *args) {
-	StopWatch_t watch;
-	startTimer(&watch);
-
 	worker *w = args;
 
 	// there is work to be done until there are no more incoming packets from the dispatcher (p_remaining)
@@ -44,9 +42,6 @@ void *execute_worker(void *args) {
 
 	// signal to the dispatcher that this worker is done
 	w->is_done = 1;
-
-	stopTimer(&watch);
-	w->time = getElapsedTime(&watch);
 
 	pthread_exit(NULL);
 	return(NULL);

@@ -8,6 +8,7 @@ typedef struct dispatcher_t {
 	int sources;
 	worker **workers;
 	float time;
+	float folded_time;
 	int uniform;
 } dispatcher;
 

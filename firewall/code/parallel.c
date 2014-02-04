@@ -6,7 +6,7 @@
 
 #include "parallel.h"
 
-float parallel_firewall(int numPackets, int numSources, long mean, int uniformFlag, short experimentNumber) {
+result *parallel_firewall(int numPackets, int numSources, long mean, int uniformFlag, short experimentNumber) {
 	worker **workers = malloc(numSources * sizeof(worker *));
 	for(int i = 0; i < numSources; i++) {
 		workers[i] = init_worker(numPackets, Q_SIZE);
@@ -24,7 +24,9 @@ float parallel_firewall(int numPackets, int numSources, long mean, int uniformFl
 	pthread_create(&tid, NULL, execute_dispatcher, d);
 	pthread_join(tid, NULL);
 
-	float time = d->time;
+	result *r = init_result();
+	r->time = d->time;
+	r->folded_time = d->folded_time;
 
-	return(time);
+	return(r);
 }

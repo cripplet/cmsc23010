@@ -5,7 +5,7 @@
 
 #include "serial_queue.h"
 
-float serial_queue_firewall(int numPackets, int numSources, long mean, int uniformFlag, short experimentNumber) {
+result *serial_queue_firewall(int numPackets, int numSources, long mean, int uniformFlag, short experimentNumber) {
 	worker **workers = malloc(numSources * sizeof(worker *));
 	for(int i = 0; i < numSources; i++) {
 		workers[i] = init_worker(numPackets, Q_SIZE);
@@ -28,5 +28,9 @@ float serial_queue_firewall(int numPackets, int numSources, long mean, int unifo
 		}
 	}
 	stopTimer(&watch);
-	return(getElapsedTime(&watch));
+
+	result *r = init_result();
+	r->time = getElapsedTime(&watch);
+
+	return(r);
 }
