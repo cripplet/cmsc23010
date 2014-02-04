@@ -76,11 +76,17 @@ The lamport queue will export the following functions--
 
 \begin{alltt}
 struct lamport_queue_t \{
-  int depth;
-\} lq;
-lq *lq_init(int depth);
-void lq_enq(lq *q, struct packet_source_t *pkt);   // called only by the dispatcher thread
-struct packet_source_t *lq_deq(lq *q);             // called only by the parent worker thread
+  int size;
+  Packet_t **elem;
+  ...
+\} q;
+
+q *q_init(int depth);
+void enq(q *q, Packet_t *pkt);          // called only by the dispatcher thread
+Packet_t *deq(q *q);                    // called only by the parent worker thread
+int is_full(q *q);
+int is_empty(q *q);
+
 \end{alltt}
 
 \cpart{Workers}
@@ -88,11 +94,18 @@ struct packet_source_t *lq_deq(lq *q);             // called only by the parent 
 Each worker is responsible for processing data from one source, which is stored in the associated queue--
 \begin{alltt}
 struct worker_t \{
-  int p_remaining;                      // packets remaining to supply
-  lq *q;                                // the queue
+  int p_remaining;                        // packets which have yet to have been supplied
+                                          //   by the dispatcher
+  q *q;
+  int is_done;                            // !p_remaining && is_empty(q)
+  ...
 \} worker;
-worker *worker_init(int T);             // initializes worker\_t struct with p\_remaining = T
-void process_next_packet(worker *);     // pops an item from the source lq and process data
+
+worker *init_worker(int q_depth, int T);  // initializes the worker and the associated queue
+void *execute_worker(void *args);         // thread handler for the worker
+long process_packet(worker *);            // blocks until w->q is not empty and processes
+                                          //   next packet
+
 \end{alltt}
 
 \cpart{Dispatcher}
@@ -100,18 +113,20 @@ void process_next_packet(worker *);     // pops an item from the source lq and p
 The dispatcher thread is responsible for relaying data from the provided \code{packet\_source\_t} provider--
 
 \begin{alltt}
-struct dispatch_t \{
-  worker *threads;                                      // list of all threads
-\} dispatch;
-dispatch *dispatch_init(int n, int T, int go_parallel); // spawns n worker threads to handle
-                                                        //   packets-- executes serial-queue if
-                                                        //   go_parallel = false void
-enqueue_next_packet(int difficulty);                    // gets a new packet_source_t (with
-                                                        //   difficulty get_constant_packet,
-                                                        //   get_uniform_packet, or
-                                                        //   get_exponential_packet), if queue
-                                                        //   is empty and assigns to specified
-                                                        //   worker
+
+struct dispatcher_t \{
+  worker **workers;                       // list of worker data structs
+  ...
+\} dispatcher;
+
+dispatcher *init_dispatcher(...);
+void *execute_dispatcher(void *args);     // thread handler for the dispatcher
+                                          // loops through the list of workers and assigns
+                                          //   non-full queues with an appropriate packet
+                                          // skips fully-queued workers
+                                          // exits when sum(w->is_done) equals the number
+                                          //   of workers
+
 \end{alltt}
 
 \cpart{Executable}
@@ -119,8 +134,16 @@ enqueue_next_packet(int difficulty);                    // gets a new packet_sou
 The main executable should have the following format--
 
 \begin{alltt}
-void execute(n, T, D, W, int use_serial);    // spawns the dispatcher thread, or use the
-                                             //   provided serial implementation
+
+struct result_t \{
+  float time;                             // the main return result
+  long fingerprint;                       // the fingerprint of the data generated -- used for
+                                          //   correctness testing
+  ...
+\}
+
+result *(*firewall_execute) (int T, int n, long W, int is_uniform, short id);
+
 \end{alltt}
 
 \section{Hypotheses}
@@ -165,6 +188,14 @@ The key function of the queue is to act as a buffer so that the worker threads w
 constantly-- thus we would expect that as $D$ increases, the dispatcher can simply fill up the queue and run idle (that is, no longer contribute to the 
 non-serializable work load in Amdahl's law), and thus would \ti{increase} the speedup, when compared to the same results from \tb{Speedup with Uniform Load}.
 
+\section{Data \& Analysis}
+
+\cpart{Parallel Overhead}
+\cpart{Dispatcher Rate}
+\cpart{Speedup with Uniform Load}
+\cpart{Speedup with Exponentially Distributed Load}
+\cpart{Speedup with Increased Queue Depth}
+
 \section{Testing}
 
 \cpart{Queue Integrity}
@@ -174,31 +205,36 @@ simple test model--
 
 \begin{alltt}
 struct blob_t \{
-  lq *q;
-  packet_source_t packets[];
+  q *q;
+  Packet_t packets[DIM];
 \} blob;
 
-void test_lq() \{
-  pthread_create(..., enq_handler, ...);
-  pthread_create(..., deq_handler, ...);
+typedef void *(*func) (void *) thread_handler
+
+void test_q(thread_handler) \{
+  pthread_create(..., thread_handler, ...);
+  for(int i = 0; i < DIM; i++) \{
+    Packet_t p = deq(b->q);
+    ASSERT(getFingerprint(p->...) == getFingerprint(b->packets[i]->...));
+    ...
+  \}
 \}
 
 void *enq_handler(void *args) \{
   blob *b = (blob *) args;
-  for(int i = 0; i < CONST; i++) \{
-    lq_enq(b->q, b->packets[i]);
-    sleep(10);
+  for(int i = 0; i < DIM; i++) \{
+    q_enq(b->q, b->packets[i]);
   \}
-  pthread_exit(NULL);
+  ...
 \}
 
-void *deq_handler(void *args) \{
-  ...
-  for(int i = 0; i < CONST; i++) \{
-    p = lq_dec(b->q);
-    assert(p == b->packets[i]);
+void *enq_handler_sleep(void *args) \{
+  blob *b = (blob *) args;
+  for(int i = 0; i < DIM; i++) \{
+    enq(b->q, b->packets[i]);
+    sleep(1);
   \}
-  pthread_exit(NULL);
+  ...
 \}
 \end{alltt}
 
@@ -214,7 +250,20 @@ The packets generated by calls within the dispatcher are initialized with the de
 
 \cpart{Worker \& Dispatcher Quality Assurance}
 
-If the previous tests pass, then the parallel implementation workers and dispatchers will be handling the same data as the serial implementation, and without race 
-conditions-- we can thus pass the same packets to the serial implementation, and compare the output to ensure that the two results match.
+We will use the fingerprints of the processed results to identify if the results given are correct; we will check \code{parallel\_firewall} and \code{serial\_queue\_firewall} against the results of \code{serial\_firewall}--
+
+\begin{alltt}
+
+void *test_correctness(void *args) {
+  ...
+  result *p = serial_firewall(t, n, w, uniform_flag, i);
+  result *q = parallel_firewall(t, n, w, uniform_flag, i);
+  result *r = serial_queue_firewall(t, n, w, uniform_flag, i);
+  ASSERT(p->fingerprint == q->fingerprint);
+  ASSERT(q->fingerprint == r->fingerprint);
+  ...
+}
+
+\end{alltt}
 
 \end{document}
