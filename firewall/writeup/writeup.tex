@@ -191,9 +191,72 @@ non-serializable work load in Amdahl's law), and thus would \ti{increase} the sp
 \section{Data \& Analysis}
 
 \cpart{Parallel Overhead}
+
+\begin{figure}
+\begin{center}
+	\includegraphics[scale=0.5]{speedup_vs_work.png}
+	\caption{The parallel overhead is demonstrated by comparing the running time of \code{serial\_queue} vs. \code{serial}. As more time is spent on processing the packet (work), we see the parallel data struct overhead contribute to less of the running time.}
+	\label{speedup_vs_work}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+	\includegraphics[scale=0.5]{worker_rate.png}
+	\caption{Total packets processing rate is plotted against the work involved with processing each packet. Line of best fit $$wR(W) = 0.1404\text{ ln}(W) + 0.0797$$}
+	\label{worker_rate}
+\end{center}
+\end{figure}
+
+We see that the relative speedup of the serial queue implementation (representing the parallel overhead) increases towards unity as $W \to \infty$, as is expected-- 
+the relative amount of work done by \code{getFingerprint} increases as $W$ increases, which leads to the overall decreased contribution of time allotted in 
+initializing the parallel data structures.
+
 \cpart{Dispatcher Rate}
+
+\begin{figure}
+\begin{center}
+	\includegraphics[scale=0.5]{dispatcher_rate.png}
+	\caption{Packet rate being dispatched as a function of the number of threads. We see that the rate levels off (as is the characteristic of a logarithmic function) as $n \to \infty$. Line of best fit $$dR(n) = 987.8244\text{ ln}(n) + 890.3917$$}
+	\label{dispatcher_rate}
+\end{center}
+\end{figure}
+
+The dispatch rate represents the rate at which the dispatcher thread is able to hand out packets to the workers; we see that the logarithmic nature of the graph 
+implies there are diminishing returns for increasing the number of threads, as the serial nature of the dispatch thread means we cannot process packets faster than 
+the dispatcher can hand out-- the bottleneck here limits the fundamental utility of our program.
+
 \cpart{Speedup with Uniform Load}
+
+\begin{figure}
+\begin{center}
+	\includegraphics[scale=0.5]{uniform_speedup.png}
+	\caption{Parallel execution speedup (uniform packet distribution) as a function of source count.}
+	\label{uniform_speedup}
+\end{center}
+\end{figure}
+
+We see that the spread of speedup ranges at $n = 32$ is much wider than the spread at $n = 1$-- this is expected, as the total amount of time spent in the 
+$getFingerprint$ call becomes a significant portion of the running time of the program for high $W$, which as a result, benefits more parallelization.
+
+Given the dispatcher rate $dW$ and the worker rate $rW$, the max rate at which packets can be processed is $\min(rW(W), dW(n))$; plugging the appropriate values of 
+$W$ and $n$, we arrive at the predicted speedups as shown by the dotted lines in \figref{uniform_speedup}.
+
 \cpart{Speedup with Exponentially Distributed Load}
+
+\begin{figure}
+\begin{center}
+	\includegraphics[scale=0.5]{exponential_speedup.png}
+	\caption{Parallel execution speedup (exponential packet distribution) as a function of source count.}
+	\label{exponential_speedup}
+\end{center}
+\end{figure}
+
+Comparing \figref{exponential_speedup} with \figref{uniform_speedup}, we see that the speedup rates for an exponentially-distributed workload to be much less than 
+that of the uniformly-distributed workload-- at $n = 16$, the relative speedup ratio between exponential and uniform distributions is $\sim77.8\%$; furthermore, we 
+see that the relative speedup ratio is $\sim70\%$ at $n = 32$. This is to be expected, as was stated in the hypothesis, as load balancing in our parallel implementation cannot 
+handle the workloads given to us.
+
 \cpart{Speedup with Increased Queue Depth}
 
 \section{Testing}
@@ -254,7 +317,7 @@ We will use the fingerprints of the processed results to identify if the results
 
 \begin{alltt}
 
-void *test_correctness(void *args) {
+void *test_correctness(void *args) \{
   ...
   result *p = serial_firewall(t, n, w, uniform_flag, i);
   result *q = parallel_firewall(t, n, w, uniform_flag, i);
@@ -262,7 +325,7 @@ void *test_correctness(void *args) {
   ASSERT(p->fingerprint == q->fingerprint);
   ASSERT(q->fingerprint == r->fingerprint);
   ...
-}
+\}
 
 \end{alltt}
 
