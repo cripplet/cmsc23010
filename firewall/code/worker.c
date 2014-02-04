@@ -1,4 +1,5 @@
 #define _POSIX_C_SOURCE 199309L
+#define SLEEP_TIME 4
 
 #include <pthread.h>
 #include <unistd.h>
@@ -16,7 +17,7 @@ worker *init_worker(int p_remaining, int q_size) {
 	w->time = 0;
 	w->p_remaining = p_remaining;
 	w->queue = init_q(q_size);
-	w->tspec.tv_nsec = 4;
+	w->tspec.tv_nsec = SLEEP_TIME;
 	return(w);
 }
 
