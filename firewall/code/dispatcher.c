@@ -12,6 +12,7 @@ dispatcher *init_dispatcher(int sources, worker **workers, PacketSource_t pks, i
 	d->time = 0;
 	d->folded_time = 0;
 	d->uniform = uniform_flag;
+	d->fingerprint = 0;
 
 	return(d);
 }
@@ -50,6 +51,7 @@ void *execute_dispatcher(void *args) {
 	// get the spin wait time of the workers
 	for(int i = 0; i < d->sources; i++) {
 		d->time += d->workers[i]->time;
+		d->fingerprint += d->workers[i]->fingerprint;
 	}
 
 	pthread_exit(NULL);

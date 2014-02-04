@@ -37,5 +37,8 @@ result *serial_firewall(int numPackets, int numSources, long mean, int uniformFl
 
 	result *r = init_result();
 	r->time = getElapsedTime(&watch);
+
+	r->fingerprint = fingerprint;
+
 	return(r);
 }

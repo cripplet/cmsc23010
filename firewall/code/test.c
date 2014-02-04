@@ -6,6 +6,11 @@
 #include "utils/generators.h"
 #include "utils/fingerprint.h"
 
+#include "serial.h"
+#include "parallel.h"
+#include "serial_queue.h"
+#include "result.h"
+
 #include "queue.h"
 
 #define DIM 16
@@ -35,12 +40,30 @@ tq_blob *init_tq_blob() {
 int test_enq();
 void *enq_thread(void *);
 void *enq_thread_sleep(void *);
+int test_correctness();
 
 int test_all() {
 	return(
 		test_enq(enq_thread) &
-		test_enq(enq_thread_sleep)
+		test_enq(enq_thread_sleep) &
+		test_correctness()
 	);
+}
+
+int test_correctness() {
+	int t = 131072;
+	int n = 16;
+	long w = 8000;
+	int uniform_flag = 1;
+	short i = 1;
+
+	result *p = serial_firewall(t, n, w, uniform_flag, i);
+	result *q = parallel_firewall(t, n, w, uniform_flag, i);
+	result *r = serial_queue_firewall(t, n, w, uniform_flag, i);
+	int success = (p->fingerprint == q->fingerprint) && (q->fingerprint == r->fingerprint);
+
+	fprintf(stderr, "exiting test_correctness with success == %i\n", success);
+	return(success);
 }
 
 int test_enq(void * (*func) (void *)) {

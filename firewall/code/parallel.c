@@ -28,5 +28,7 @@ result *parallel_firewall(int numPackets, int numSources, long mean, int uniform
 	r->time = d->time;
 	r->folded_time = d->folded_time;
 
+	r->fingerprint = d->fingerprint;
+
 	return(r);
 }

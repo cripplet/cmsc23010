@@ -32,5 +32,9 @@ result *serial_queue_firewall(int numPackets, int numSources, long mean, int uni
 	result *r = init_result();
 	r->time = getElapsedTime(&watch);
 
+	for(int i = 0; i < numSources; i++) {
+		r->fingerprint += workers[i]->fingerprint;
+	}
+
 	return(r);
 }
