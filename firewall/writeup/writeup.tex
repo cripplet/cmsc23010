@@ -179,15 +179,6 @@ overhead is nontrivial in the cases to be tested.
 We would expect the speedup to be significantly less than the serial implementation, as the load imbalance would mean unlucky threads are spending far more time 
 over their equally-distributed number of packets than the threads with lower tids.
 
-\cpart{Speedup with Increased Queue Depth}
-
-We shall measure the speedup of the parallel implementation at a set $T, W, n$, but with varying $D$-- we shall use the uniform workload packets, as they are the 
-most predictable in terms of parallelizability.
-
-The key function of the queue is to act as a buffer so that the worker threads will not have to wait for the (serialized) dispatcher to hand out packets 
-constantly-- thus we would expect that as $D$ increases, the dispatcher can simply fill up the queue and run idle (that is, no longer contribute to the 
-non-serializable work load in Amdahl's law), and thus would \ti{increase} the speedup, when compared to the same results from \tb{Speedup with Uniform Load}.
-
 \section{Data \& Analysis}
 
 \cpart{Parallel Overhead}
@@ -256,8 +247,6 @@ Comparing \figref{exponential_speedup} with \figref{uniform_speedup}, we see tha
 that of the uniformly-distributed workload-- at $n = 16$, the relative speedup ratio between exponential and uniform distributions is $\sim77.8\%$; furthermore, we 
 see that the relative speedup ratio is $\sim70\%$ at $n = 32$. This is to be expected, as was stated in the hypothesis, as load balancing in our parallel implementation cannot 
 handle the workloads given to us.
-
-\cpart{Speedup with Increased Queue Depth}
 
 \section{Testing}
 
