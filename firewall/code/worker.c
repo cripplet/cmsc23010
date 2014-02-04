@@ -1,4 +1,7 @@
+#define _POSIX_C_SOURCE 199309L
+
 #include <pthread.h>
+#include <unistd.h>
 
 #include "utils/fingerprint.h"
 #include "utils/stopwatch.h"
@@ -13,6 +16,7 @@ worker *init_worker(int p_remaining, int q_size) {
 	w->time = 0;
 	w->p_remaining = p_remaining;
 	w->queue = init_q(q_size);
+	w->tspec.tv_nsec = 4;
 	return(w);
 }
 
@@ -23,7 +27,9 @@ worker *init_worker(int p_remaining, int q_size) {
  */
 long process_packet(worker *w) {
 	startTimer(&w->watch);
-	while(is_empty(w->queue));
+	while(is_empty(w->queue)) {
+		nanosleep(&w->tspec, NULL);
+	}
 	stopTimer(&w->watch);
 
 	w->time += getElapsedTime(&w->watch);
