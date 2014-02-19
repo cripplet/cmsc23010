@@ -19,9 +19,9 @@ typedef struct lock_t {
 	void *l;
 } lock;
 
-lock *init_lock(int type);
-int l_lock(lock *l);
+lock *init_lock(int type, void *args);
+int l_lock(lock *l, void *args);
 int l_try(lock *l);
-int l_unlock(lock *l);
+int l_unlock(lock *l, void *args);
 
 #endif

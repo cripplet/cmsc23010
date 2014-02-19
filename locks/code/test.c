@@ -22,11 +22,14 @@ struct test_lock_blob_t *init_test_lock_blob(lock *l) {
 }
 
 void *counter_increment(void *args) {
-	struct test_lock_blob_t *b = args;
+	struct test_lock_blob_t *b = (struct test_lock_blob_t *) args;
+
+	int slot;
+
 	for(int i = 0; i < COUNTER_INCREMENT; i++) {
-		l_lock(b->counter_lock->l);
+		l_lock(b->counter_lock->l, &slot);
 		b->counter++;
-		l_unlock(b->counter_lock->l);
+		l_unlock(b->counter_lock->l, &slot);
 	}
 
 	pthread_exit(NULL);
@@ -34,7 +37,9 @@ void *counter_increment(void *args) {
 }
 
 int test_lock(int type) {
-	lock *l = init_lock(type);
+	int lock_size = COUNTERS;
+
+	lock *l = init_lock(type, &lock_size);
 
 	struct test_lock_blob_t *b = init_test_lock_blob(l);
 

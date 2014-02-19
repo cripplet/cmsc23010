@@ -1,3 +1,5 @@
+#define _POSIX_C_SOURCE 199309L
+
 #include <pthread.h>
 #include <stdlib.h>
 #include <sys/time.h>
@@ -8,6 +10,11 @@
 
 typedef struct lock_blob_t {
 	volatile int *atomic_val;
+	struct timespec *nsleep;
+
+	// Anderson-specific lock struct
+	int size;
+	int *flags;
 } lock_blob;
 
 lock_blob *init_lock_blob() {
@@ -24,6 +31,7 @@ void *init_ttas() {
 
 void *init_back() {
 	lock_blob *b = init_ttas();
+	b->nsleep = calloc(1, sizeof(struct timespec));
 	// iniitalize the backoff seed
 	srand(time(NULL));
 	return(b);
@@ -35,20 +43,45 @@ void *init_mutx() {
 	return(mutx);
 }
 
+void *init_alck(void *args) {
+	int *size = (int *) args;
+	lock_blob *b = init_ttas();
+	b->size = *size;
+	b->flags = malloc(b->size * sizeof(int));
+	return(b);
+}
+
 void lock_ttas(lock *l) {
 	lock_blob *b = l->l;
 	while(__sync_lock_test_and_set((volatile int *) (b->atomic_val), 1));
 }
 
 void lock_back(lock *l) {
+	int limit = MIN_DELAY;
+	int delay;
+
 	lock_blob *b = l->l;
-	
+	b->nsleep->tv_nsec = MIN_DELAY;
 	while(__sync_lock_test_and_set((volatile int *) (b->atomic_val), 1)) {
+		if(b->nsleep->tv_nsec < MAX_DELAY) {
+			delay = rand() % limit;
+			b->nsleep->tv_nsec = (delay < limit) ? delay : limit;
+			limit <<= 2;
+		}
+		nanosleep(b->nsleep, NULL);
 	}
 }
 
 void lock_mutx(lock *l) {
 	pthread_mutex_lock(l->l);
+}
+
+void lock_alck(lock *l, void *args) {
+	lock_blob *b = l->l;
+
+	int *slot = (int *) args;
+	*slot = __sync_fetch_and_add((volatile int *) (b->atomic_val), 1) % b->size;
+	while(!b->flags[*slot]);
 }
 
 void unlock_ttas(lock *l) {
@@ -60,7 +93,15 @@ void unlock_mutx(lock *l) {
 	pthread_mutex_unlock(l->l);
 }
 
-lock *init_lock(int type) {
+void unlock_alck(lock *l, void *args) {
+	lock_blob *b = l->l;
+
+	int *slot = (int *) args;
+	b->flags[*slot] = 0;
+	b->flags[(*slot + 1) % b->size] = 1;
+}
+
+lock *init_lock(int type, void *args) {
 	lock *l = malloc(sizeof(lock));
 	l->type = type;
 	l->status = 0;
@@ -77,6 +118,7 @@ lock *init_lock(int type) {
 			l->l = init_mutx();
 			break;
 		case ALCK:
+			l->l = init_alck(args);
 			break;
 		case CLHQ:
 			break;
@@ -87,7 +129,7 @@ lock *init_lock(int type) {
 	return(l);
 }
 
-int l_lock(lock *l) {
+int l_lock(lock *l, void *args) {
 	switch(l->type) {
 		case TTAS:
 			lock_ttas(l);
@@ -101,14 +143,14 @@ int l_lock(lock *l) {
 	}
 
 	l->status = 1;
-	return(1);
+	return(0);
 }
 
 int l_try(lock *l) {
 	return(l->status);
 }
 
-int l_unlock(lock *l) {
+int l_unlock(lock *l, void *args) {
 	l->status = 0;
 
 	switch(l->type) {
@@ -119,7 +161,10 @@ int l_unlock(lock *l) {
 		case MUTX:
 			unlock_mutx(l);
 			break;
+		case ALCK:
+			unlock_alck(l, args);
+			break;
 	}
 
-	return(1);
+	return(0);
 }

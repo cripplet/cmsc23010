@@ -19,7 +19,9 @@ int main(int argc, char **argv) {
 			fprintf(stderr, "running tests\n");
 			int result = (
 				test_lock(TTAS) &
-				test_lock(MUTX));
+				test_lock(BACK) &
+				test_lock(MUTX) &
+				test_lock(ALCK));
 			fprintf(stderr, "test_lock: %s\n", !result ? "PASS" : "FAIL");
 			return(result);
 		case IDLE:
@@ -29,11 +31,5 @@ int main(int argc, char **argv) {
 		case PSCL:
 			break;
 	}
-
-
-
-	lock *l = init_lock(MUTX);
-	l_lock(l);
-	l_unlock(l);
 	return(0);
 }
