@@ -3,6 +3,6 @@
 
 #include "result.h"
 
-result *parallel_firewall(const int, const int, const long, const int, const short);
+result *parallel_firewall(const int, const int, const long, const int, const short, int, int);
 
 #endif

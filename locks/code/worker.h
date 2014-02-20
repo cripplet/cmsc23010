@@ -9,6 +9,12 @@
 #include "queue.h"
 
 typedef struct worker_t {
+	int strategy;
+	struct worker_t **peers;
+	int num_peers;
+
+	void *slot;
+
 	long fingerprint;
 	StopWatch_t watch;
 	int p_remaining;
@@ -16,9 +22,10 @@ typedef struct worker_t {
 	q *queue;
 	int is_done;
 	struct timespec tspec;
+
 } worker;
 
-worker *init_worker(int, int);
+worker *init_worker(int, int, int);
 
 void *execute_worker(void *);
 

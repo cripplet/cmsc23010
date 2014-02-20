@@ -14,17 +14,6 @@ q *init_q(int size) {
 	return(queue);
 }
 
-void free_q(q *queue) {
-	if(queue == NULL) {
-		return;
-	}
-	for(int i = 0; i < queue->size; i++) {
-		free(queue->elem[i]);
-	}
-	free(queue->elem);
-	free(queue);
-}
-
 int is_full(q *queue) {
 	return((queue->tail - queue->head) == queue->size);
 }

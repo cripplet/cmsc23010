@@ -13,6 +13,14 @@
 #define PSCL 32		// analyze use-cases scheduling policies which will result in the best speedup
 #define TUNE 64		// tunes the backoff lock
 
+/* Locking strategies */
+
+#define LFRE 1		// lock-free
+#define HOMQ 2		// home queue - needlessly acquire a lock before dequeuing
+#define RNDQ 4		// deq from random peer queue
+#define LSTQ 8		// deq using try_lock
+#define AWSM 16
+
 void counter_1();
 void counter_2();
 void counter_3();

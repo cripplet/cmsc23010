@@ -20,7 +20,7 @@ test: clean $(EXECUTABLE)
 	./$(EXECUTABLE) 1
 
 run: clean $(EXECUTABLE)
-	./$(EXECUTABLE) 4
+	./$(EXECUTABLE) 16
 
 clean:
 	rm -f $(EXECUTABLE) *.o
