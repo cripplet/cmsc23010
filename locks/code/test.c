@@ -58,7 +58,7 @@ int test_strategy(int strategy) {
 
 	int success = (p->fingerprint == q->fingerprint);
 
-	fprintf(stderr, "test_strategy(%i) results: %s (%li)\n", strategy, success ? "MATCHED" : "DIDN'T MATCH", q->fingerprint);
+	fprintf(stderr, "test_strategy(%i) results: %s (%li / %li)\n", strategy, success ? "MATCHED" : "DIDN'T MATCH", q->fingerprint, p->fingerprint);
 
 	return(!success);
 }
@@ -79,7 +79,7 @@ int test_lock(int type) {
 
 	int success = (b->counter == COUNTERS * COUNTER_INCREMENT);
 
-	fprintf(stderr, "test_lock(%i) results: %s (%i)\n", type, success ? "MATCHED" : "DIDN'T MATCH", b->counter);
+	fprintf(stderr, "test_lock(%i) results: %s (%i / %i)\n", type, success ? "MATCHED" : "DIDN'T MATCH", b->counter, COUNTERS * COUNTER_INCREMENT);
 
 	return(!success);
 }

@@ -22,15 +22,16 @@ int main(int argc, char **argv) {
 		case TEST:
 			fprintf(stderr, "running tests\n");
 			int result = (
-				test_lock(TTAS) |
-				test_lock(BACK) |
-				test_lock(MUTX) |
-				test_lock(ALCK) |
-				test_lock(CLHQ) |
-				test_strategy(LFRE) |
-				test_strategy(HOMQ) |
-				test_strategy(RNDQ) |
-				test_strategy(LSTQ)
+				// test_lock(TTAS) |
+				// test_lock(BACK) |
+				// test_lock(MUTX) |
+				// test_lock(ALCK) |
+				// test_lock(CLHQ) |
+				// test_strategy(LFRE) |
+				// test_strategy(HOMQ) |
+				// test_strategy(RNDQ) |
+				// test_strategy(LSTQ) |
+				test_strategy(AWSM)
 			);
 			fprintf(stderr, "test results: %s\n", !result ? "PASS" : "FAIL");
 			return(result);

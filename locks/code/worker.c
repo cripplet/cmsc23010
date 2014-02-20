@@ -81,8 +81,30 @@ long process_packet(worker *w) {
 			}
 			nanosleep(&w->tspec, NULL);
 			return(0);
+		// do work on own queue until the queue is empty --
+		//	then search in an orderly manner for empty queue
 		case AWSM:
-			break;
+			if(is_empty(w->queue)) {
+				nanosleep(&w->tspec, NULL);
+			}
+			if(is_empty(w->queue)) {
+				for(int i = 0; i < w->num_peers; i++) {
+					l_lock(w->peers[i]->queue->l, w->slot);
+					if(!is_empty(w->peers[i]->queue)) {
+						pkt = deq(w->peers[i]->queue);
+						l_unlock(w->peers[i]->queue->l, w->slot);
+						return(getFingerprint(pkt->iterations, pkt->seed));
+					}
+					l_unlock(w->peers[i]->queue->l, w->slot);
+					nanosleep(&w->tspec, NULL);
+				}
+				return(0);
+			} else {
+				l_lock(w->queue->l, w->slot);
+				pkt = deq(w->queue);
+				l_unlock(w->queue->l, w->slot);
+				break;
+			}
 	}
 	return(getFingerprint(pkt->iterations, pkt->seed));
 }
@@ -104,7 +126,6 @@ void *execute_worker(void *args) {
 				w_done += (!w->peers[i]->p_remaining && is_empty(w->peers[i]->queue));
 			}
 		}
-		// fprintf(stderr, "w_done %i, p_r %i, empty %i\n", w_done, w->p_remaining, is_empty(w->queue));
 	}
 
 	// signal to the dispatcher that this worker is done
