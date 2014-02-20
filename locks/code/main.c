@@ -8,8 +8,8 @@
 #include "tune.h"
 
 int main(int argc, char **argv) {
-	min_delay = 16;
-	max_delay = 128;
+	min_delay = 1;
+	max_delay = 1;
 
 	int mode = TEST;
 	if(argc == 2) {

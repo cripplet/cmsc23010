@@ -7,6 +7,9 @@
 
 #include "expr.h"
 
+#define TEN_MS 10000
+#define MILLION 1000000
+
 void counter_1() {
 	int in_time;
 	float out_count;
@@ -52,15 +55,43 @@ void counter_2() {
 			for(int iter = 0; iter < ITER; iter++) {
 				out_time += work_counter_parallel(in_count, 1, lock_mode);
 			}
-			fprintf(stderr, "%i\t%s\t%s\t%f\t%i\t%i\n", IDLE, "COUNTER_1", "parallel", out_time, in_count, lock_mode);
+			fprintf(stderr, "%i\t%s\t%s\t%f\t%i\t%i\n", IDLE, "COUNTER_2", "parallel", out_time, in_count, lock_mode);
 		}
 	}
 }
 
 void counter_3() {
+	float out_count;
+	int n;
+	int lock_mode;
+	for(int m = 0; m < 5; m++) {
+		lock_mode = pow(2, m);
+		out_count = 0;
+		for(int n_base = 0; n_base < 7; n_base++) {
+			n = pow(2, n_base);
+			for(int iter = 0; iter < ITER; iter++) {
+				out_count += time_counter_parallel(TEN_MS, n, lock_mode) / ITER;
+			}
+			fprintf(stderr, "%i\t%s\t%i\t%f\t%i\n", SCAL, "COUNTER_3", n, out_count, lock_mode);
+		}
+	}
 }
 
 void counter_4() {
+	float out_time;
+	int n;
+	int lock_mode;
+	for(int m = 0; m < 5; m++) {
+		lock_mode = pow(2, m);
+		out_time = 0;
+		for(int n_base = 0; n_base < 7; n_base++) {
+			n = pow(2, n_base);
+			for(int iter = 0; iter < ITER; iter++) {
+				out_time += work_counter_parallel(MILLION, n, lock_mode) / ITER;
+			}
+			fprintf(stderr, "%i\t%s\t%i\t%f\t%i\n", SCAL, "COUNTER_4", n, out_time, lock_mode);
+		}
+	}
 }
 
 void counter_5() {
@@ -79,7 +110,6 @@ void packet_4() {
 }
 
 void tune() {
-	int in_time = 10000;
 	float out_count;
 	for(int min_d = 0; min_d < 10; min_d++) {
 		for(int max_d = min_d; max_d < 10; max_d++) {
@@ -87,7 +117,7 @@ void tune() {
 			max_delay = pow(2, max_d);
 			out_count = 0;
 			for(int iter = 0; iter < (ITER * ITER * ITER); iter++) {
-				out_count += time_counter_parallel(in_time, 8, BACK) / (ITER * ITER * ITER);
+				out_count += time_counter_parallel(TEN_MS, 8, BACK) / (ITER * ITER * ITER);
 			}
 			fprintf(stderr, "%s\t%f\t%i\t%i\n", "TUNE", out_count, min_delay, max_delay);
 		}
