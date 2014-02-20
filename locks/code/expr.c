@@ -211,16 +211,15 @@ void packet_4() {
 	int lock_mode;
 	int strategy = AWSM;
 	int work;
-	int n;
 	for(int m = 0; m < 5; m++) {
 		for(int w = 0; w < 4; w++) {
 			lock_mode = pow(2, m);
 			work = 1000 * pow(2, w);
-			loop("PACKET_3", PACKETS, 1, work, 0, lock_mode, strategy);
-			loop("PACKET_3", PACKETS, 2, work, 0, lock_mode, strategy);
-			loop("PACKET_3", PACKETS, 3, work, 0, lock_mode, strategy);
-			loop("PACKET_3", PACKETS, 7, work, 0, lock_mode, strategy);
-			loop("PACKET_3", PACKETS, 15, work, 0, lock_mode, strategy);
+			loop("PACKET_4", PACKETS, 1, work, 0, lock_mode, strategy);
+			loop("PACKET_4", PACKETS, 2, work, 0, lock_mode, strategy);
+			loop("PACKET_4", PACKETS, 3, work, 0, lock_mode, strategy);
+			loop("PACKET_4", PACKETS, 7, work, 0, lock_mode, strategy);
+			loop("PACKET_4", PACKETS, 15, work, 0, lock_mode, strategy);
 		}
 	}
 }
