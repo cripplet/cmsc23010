@@ -1,6 +1,8 @@
 #ifndef EXPR_H
 #define EXPR_H
 
+#define ITER 3
+
 /* Experiments to run */
 
 #define TEST 1
@@ -9,12 +11,19 @@
 #define FAIR 8		// analyze lock scheduling policies
 #define POHD 16		// analyze overhead in the firewall when using uncontested locks
 #define PSCL 32		// analyze use-cases scheduling policies which will result in the best speedup
+#define TUNE 64		// tunes the backoff lock
 
-int time_counter_serial(int);
-int time_counter_parallel(int, int, int);
-float work_counter_serial(int);
-float work_counter_parallel(int, int, int);
-void packet_serial(int, int, long, int, short);
-void packet_parallel(int, int, long, int, short, int, int, int);
+void counter_1();
+void counter_2();
+void counter_3();
+void counter_4();
+void counter_5();
+
+void packet_1();
+void packet_2();
+void packet_3();
+void packet_4();
+
+void tune();
 
 #endif

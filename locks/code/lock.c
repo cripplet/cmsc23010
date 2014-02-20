@@ -33,6 +33,16 @@ lock_blob *init_lock_blob() {
 	return(b);
 }
 
+void *init_slot(int type) {
+	void *slot = NULL;
+	if(type == ALCK) {
+		slot = malloc(sizeof(int));
+	} else if(type == CLHQ) {
+		slot = init_qnode();
+	}
+	return(slot);
+}
+
 void *init_ttas() {
 	lock_blob *b = init_lock_blob();
 	*(b->atomic_val) = 0;
@@ -71,16 +81,16 @@ void lock_ttas(lock *l) {
 }
 
 void lock_back(lock *l) {
-	int limit = MIN_DELAY;
+	int limit = min_delay;
 	int delay;
 
 	lock_blob *b = l->l;
-	b->nsleep->tv_nsec = MIN_DELAY;
+	b->nsleep->tv_nsec = min_delay;
 	while(__sync_lock_test_and_set((b->atomic_val), 1)) {
-		if(b->nsleep->tv_nsec < MAX_DELAY) {
+		if(b->nsleep->tv_nsec < max_delay) {
 			delay = rand() % limit;
 			b->nsleep->tv_nsec = delay;
-			limit = (MAX_DELAY > (limit << 2)) ? limit << 2 : MAX_DELAY;
+			limit = (max_delay > (limit << 2)) ? limit << 2 : max_delay;
 		}
 		nanosleep(b->nsleep, NULL);
 	}

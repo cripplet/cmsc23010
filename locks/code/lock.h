@@ -32,4 +32,6 @@ int l_lock(lock *l, void *args);
 int l_try(lock *l);
 int l_unlock(lock *l, void *args);
 
+void *init_slot(int type);
+
 #endif

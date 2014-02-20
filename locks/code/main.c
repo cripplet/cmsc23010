@@ -5,8 +5,12 @@
 #include "expr.h"
 #include "lock.h"
 #include "test.h"
+#include "tune.h"
 
 int main(int argc, char **argv) {
+	min_delay = 16;
+	max_delay = 128;
+
 	int mode = TEST;
 	if(argc == 2) {
 		mode = atoi(argv[1]);
@@ -25,12 +29,32 @@ int main(int argc, char **argv) {
 				test_lock(CLHQ));
 			fprintf(stderr, "test_lock: %s\n", !result ? "PASS" : "FAIL");
 			return(result);
+
 		case IDLE:
-		case SCAL:
-		case FAIR:
-		case POHD:
-		case PSCL:
+			counter_1();
+			counter_2();
 			break;
+
+		case SCAL:
+			counter_3();
+			counter_4();
+			break;
+
+		case FAIR:
+			counter_5();
+			break;
+
+		case POHD:
+			packet_1();
+			break;
+
+		case PSCL:
+			packet_2();
+			packet_3();
+			packet_4();
+			break;
+		case TUNE:
+			tune();
 	}
 	return(0);
 }
