@@ -10,6 +10,9 @@
 
 #include "lock.h"
 
+/* Intel i7-3770 chip has 64-byte L1 cache size, which is 16 ints per line */
+#define CACHE_FACTOR 16
+
 typedef struct lock_blob_t {
 	volatile int *atomic_val;
 	struct timespec *nsleep;
@@ -55,7 +58,7 @@ void *init_alck(void *args) {
 	int *size = (int *) args;
 	lock_blob *b = init_ttas();
 	b->size = *size;
-	b->flags = malloc(b->size * sizeof(int));
+	b->flags = malloc(b->size * CACHE_FACTOR * sizeof(int));
 	b->flags[0] = 1;
 	return(b);
 }
@@ -92,7 +95,7 @@ void lock_alck(lock *l, void *args) {
 
 	int *slot = (int *) args;
 	*slot = __sync_fetch_and_add(b->atomic_val, 1) % b->size;
-	while(!b->flags[*slot]) {
+	while(!b->flags[*slot * CACHE_FACTOR]) {
 		sched_yield();
 	}
 }
@@ -123,8 +126,8 @@ void unlock_alck(lock *l, void *args) {
 
 	int *slot = (int *) args;
 
-	b->flags[*slot] = 0;
-	b->flags[(*slot + 1) % b->size] = 1;
+	b->flags[*slot * CACHE_FACTOR] = 0;
+	b->flags[((*slot + 1) % b->size) * CACHE_FACTOR] = 1;
 }
 
 void unlock_clhq(lock *l, void *args) {
