@@ -23,7 +23,7 @@
 
 typedef struct counter_result_t {
 	int n;
-	int *contributions;
+	volatile int *contributions;
 } counter_result;
 
 counter_result *counter_5_result;

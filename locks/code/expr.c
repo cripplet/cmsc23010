@@ -101,7 +101,7 @@ void counter_4() {
 void counter_5() {
 	counter_5_result = malloc(sizeof(counter_result));
 	counter_5_result->n = CORES;
-	counter_5_result->contributions = malloc(CORES * sizeof(int));
+	counter_5_result->contributions = malloc(counter_5_result->n * sizeof(int));
 
 	int lock_mode;
 	float out_count;
@@ -111,12 +111,12 @@ void counter_5() {
 		out_count = 0;
 		std_dev = 0;
 		for(int iter = 0; iter < ITER; iter++) {
-			int tmp_count = time_counter_parallel(HUNDRED_MS, CORES, lock_mode);
+			int tmp_count = time_counter_parallel(HUNDRED_MS, counter_5_result->n, lock_mode);
 			out_count += tmp_count / ITER;
-			float mean = tmp_count / CORES;
+			float mean = tmp_count / counter_5_result->n;
 			float variance = 0;
 			for(int i = 0; i < counter_5_result->n; i++) {
-				variance += pow(counter_5_result->contributions[i] - mean, 2) / mean;
+				variance += pow(counter_5_result->contributions[i] - mean, 2) / counter_5_result->n;
 				counter_5_result->contributions[i] = 0;
 			}
 			std_dev += sqrt(variance) / ITER;

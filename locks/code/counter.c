@@ -12,6 +12,7 @@
 #include "lock.h"
 #include "expr.h"
 
+#include "tune.h"
 #include "counter.h"
 
 typedef struct signal_blob_t {
@@ -62,6 +63,8 @@ void *time_counter_handler(void *args) {
 	counter *c = (counter *) args;
 
 	int to_log = (counter_5_result != NULL);
+	volatile int *contrib = malloc(sizeof(int));
+	*contrib = 0;
 
 	void *slot = init_slot(c->l->type);
 
@@ -69,13 +72,14 @@ void *time_counter_handler(void *args) {
 		l_lock(c->l, slot);
 		c->i++;
 		if(to_log) {
-			counter_5_result->contributions[pthread_self() % counter_5_result->n]++;
+			*contrib += 1;
 		}
 		l_unlock(c->l, slot);
 	}
 
-	pthread_exit(NULL);
-	return(NULL);
+
+	pthread_exit((void *) contrib);
+	return((void *) contrib);
 }
 
 int time_counter_parallel(int M, int n, int L) {
@@ -86,15 +90,25 @@ int time_counter_parallel(int M, int n, int L) {
 	counter *c = init_counter();
 	c->l = init_lock(L, &n);
 
-	pthread_t t;
+	pthread_t *thread_ids = calloc(n, sizeof(pthread_t));
 
 	ualarm((useconds_t) M, 0);
 	for(volatile int i = 0; i < n; i++) {
-		pthread_create(&t, NULL, time_counter_handler, c);
+		pthread_create(&thread_ids[i], NULL, time_counter_handler, c);
 	}
 
 	while(b->flags) {
 		sched_yield();
+	}
+
+	int to_log = (counter_5_result != NULL);
+
+	if(to_log) {
+		for(volatile int i = 0; i < n; i++) {
+			volatile int *contrib = malloc(sizeof(int));
+			pthread_join(thread_ids[i], (void **) &contrib);
+			counter_5_result->contributions[i] = *contrib;
+		}
 	}
 
 	return(c->i);
@@ -133,11 +147,10 @@ float work_counter_parallel(int B, int n, int L) {
 	c->bound = B;
 	c->l = init_lock(L, &n);
 
-	pthread_t t;
-
 	StopWatch_t watch;
 	startTimer(&watch);
 	for(volatile int i = 0; i < n; i++) {
+		pthread_t t;
 		pthread_create(&t, NULL, work_counter_handler, c);
 	}
 
