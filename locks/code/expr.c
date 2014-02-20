@@ -231,7 +231,7 @@ void tune() {
 			max_delay = pow(2, max_d);
 			out_count = 0;
 			for(short iter = 0; iter < (ITER * ITER * ITER); iter++) {
-				out_count += time_counter_parallel(HUNDRED_MS, 8, BACK) / (ITER * ITER * ITER);
+				out_count += time_counter_parallel(HUNDRED_MS / 10, 8, BACK) / (ITER * ITER * ITER);
 			}
 			fprintf(stderr, "%s\t%f\t%i\t%i\n", "TUNE", out_count, min_delay, max_delay);
 		}

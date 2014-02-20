@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# cf. http://bit.ly/1idISBJ
+
+CD="/home/mzhang/Desktop/2013/winter/cmsc230/git/cmsc23010/locks/code"
+
+bash $CD/run_all.sh > $CD/out.log

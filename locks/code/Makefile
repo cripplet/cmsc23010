@@ -23,4 +23,4 @@ run: clean $(EXECUTABLE)
 	./$(EXECUTABLE) 8
 
 clean:
-	rm -f $(EXECUTABLE) *.o
+	rm -f $(EXECUTABLE) *.o *.tsv *.log
