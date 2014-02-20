@@ -152,7 +152,7 @@ void loop(char *header, int packets, int n, long work, int uniform, int lock_mod
 		out_time += (r->folded_time) / ITER;
 		free(r);
 	}
-	fprintf(stderr, "%i\t%s\t%s\t%i\t%f\t%li\t%i\t%i\t%i\n", PSCL, header, "parallel", packets, out_time, work, lock_mode, strategy, n);
+	fprintf(stderr, "%i\t%s\t%s\t%i\t%f\t%li\t%i\t%i\t%i\n", PSCL, header, "parallel", packets / n, out_time, work, lock_mode, strategy, n);
 
 	out_time = 0;
 	for(short iter = 0; iter < ITER; iter++) {
