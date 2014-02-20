@@ -9,7 +9,7 @@
 
 int main(int argc, char **argv) {
 	min_delay = 1;
-	max_delay = 1;
+	max_delay = 16;
 
 	int mode = TEST;
 	if(argc == 2) {
