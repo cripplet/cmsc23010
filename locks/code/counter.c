@@ -10,6 +10,7 @@
 
 #include "utils/stopwatch.h"
 #include "lock.h"
+#include "expr.h"
 
 #include "counter.h"
 
@@ -60,11 +61,16 @@ int time_counter_serial(int M) {
 void *time_counter_handler(void *args) {
 	counter *c = (counter *) args;
 
+	int to_log = (counter_5_result != NULL);
+
 	void *slot = init_slot(c->l->type);
 
 	while(b->flags) {
 		l_lock(c->l, slot);
 		c->i++;
+		if(to_log) {
+			counter_5_result->contributions[pthread_self() % counter_5_result->n]++;
+		}
 		l_unlock(c->l, slot);
 	}
 

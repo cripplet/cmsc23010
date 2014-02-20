@@ -21,6 +21,13 @@
 #define LSTQ 8		// deq using try_lock
 #define AWSM 16
 
+typedef struct counter_result_t {
+	int n;
+	int *contributions;
+} counter_result;
+
+counter_result *counter_5_result;
+
 void counter_1();
 void counter_2();
 void counter_3();

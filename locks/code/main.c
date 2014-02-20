@@ -15,7 +15,7 @@ int main(int argc, char **argv) {
 	if(argc == 2) {
 		mode = atoi(argv[1]);
 	} else {
-		fprintf(stderr, "usage: %s <MODE>\n\tTEST:	run test suite\n", argv[0]);
+		fprintf(stderr, "usage: %s [ MODE = TEST ]\n\tTEST	run test suite\n\tIDLE\n\tSCAL\n\tFAIR\n\tPOHD\n\tPSCL\n\tTUNE\n", argv[0]);
 	}
 
 	switch(mode) {
