@@ -6,18 +6,20 @@
 #include "test.h"
 
 #define COUNTERS 10
-#define COUNTER_INCREMENT 1000
+#define COUNTER_INCREMENT 10000
 #define SLEEP_WAIT 1
 
 struct test_lock_blob_t {
 	int counter;
 	lock *counter_lock;
+	int is_done;
 };
 
 struct test_lock_blob_t *init_test_lock_blob(lock *l) {
 	struct test_lock_blob_t *blob = malloc(sizeof(struct test_lock_blob_t));
 	blob->counter = 0;
 	blob->counter_lock = l;
+	blob->is_done = 0;
 	return(blob);
 }
 
@@ -31,6 +33,10 @@ void *counter_increment(void *args) {
 		b->counter++;
 		l_unlock(b->counter_lock->l, &slot);
 	}
+
+	l_lock(b->counter_lock->l, &slot);
+	b->is_done++;
+	l_unlock(b->counter_lock->l, &slot);
 
 	pthread_exit(NULL);
 	return(NULL);
@@ -48,7 +54,7 @@ int test_lock(int type) {
 		pthread_create(&t, NULL, counter_increment, b);
 	}
 
-	sleep(SLEEP_WAIT);	// give time to increment
+	while(b->is_done != COUNTERS);
 
 	int result = (b->counter == COUNTERS * COUNTER_INCREMENT);
 

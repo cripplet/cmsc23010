@@ -73,7 +73,7 @@ void lock_back(lock *l) {
 }
 
 void lock_mutx(lock *l) {
-	pthread_mutex_lock(l->l);
+	// pthread_mutex_lock(l->l);
 }
 
 void lock_alck(lock *l, void *args) {
@@ -90,7 +90,7 @@ void unlock_ttas(lock *l) {
 }
 
 void unlock_mutx(lock *l) {
-	pthread_mutex_unlock(l->l);
+	// pthread_mutex_unlock(l->l);
 }
 
 void unlock_alck(lock *l, void *args) {
@@ -139,6 +139,9 @@ int l_lock(lock *l, void *args) {
 			break;
 		case MUTX:
 			lock_mutx(l);
+			break;
+		case ALCK:
+			lock_alck(l, args);
 			break;
 	}
 
