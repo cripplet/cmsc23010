@@ -26,17 +26,22 @@ struct test_lock_blob_t *init_test_lock_blob(lock *l) {
 void *counter_increment(void *args) {
 	struct test_lock_blob_t *b = (struct test_lock_blob_t *) args;
 
-	int slot;
-
-	for(volatile int i = 0; i < COUNTER_INCREMENT; i++) {
-		l_lock(b->counter_lock, &slot);
-		b->counter++;
-		l_unlock(b->counter_lock, &slot);
+	void *slot = NULL;
+	if(b->counter_lock->type == ALCK) {
+		slot = malloc(sizeof(int));
+	} else if(b->counter_lock->type == CLHQ) {
+		slot = init_qnode();
 	}
 
-	l_lock(b->counter_lock, &slot);
+	for(volatile int i = 0; i < COUNTER_INCREMENT; i++) {
+		l_lock(b->counter_lock, slot);
+		b->counter++;
+		l_unlock(b->counter_lock, slot);
+	}
+
+	l_lock(b->counter_lock, slot);
 	b->is_done++;
-	l_unlock(b->counter_lock, &slot);
+	l_unlock(b->counter_lock, slot);
 
 	pthread_exit(NULL);
 	return(NULL);

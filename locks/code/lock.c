@@ -17,11 +17,16 @@ typedef struct lock_blob_t {
 	// Anderson-specific lock struct
 	int size;
 	int *flags;
+
+	// CLH-specifc lock struct
+	volatile int * volatile *tail;
 } lock_blob;
 
 lock_blob *init_lock_blob() {
 	lock_blob *b = malloc(sizeof(lock_blob));
 	b->atomic_val = malloc(sizeof(int));
+	b->tail = malloc(sizeof(int *));
+	*b->tail = calloc(1, sizeof(int));
 	return(b);
 }
 
@@ -34,6 +39,7 @@ void *init_ttas() {
 void *init_back() {
 	lock_blob *b = init_ttas();
 	b->nsleep = calloc(1, sizeof(struct timespec));
+
 	// iniitalize the backoff seed
 	srand(time(NULL));
 	return(b);
@@ -56,7 +62,7 @@ void *init_alck(void *args) {
 
 void lock_ttas(lock *l) {
 	lock_blob *b = l->l;
-	while(__sync_lock_test_and_set((volatile int *) (b->atomic_val), 1)) {
+	while(__sync_lock_test_and_set((b->atomic_val), 1)) {
 		sched_yield();
 	}
 }
@@ -67,11 +73,11 @@ void lock_back(lock *l) {
 
 	lock_blob *b = l->l;
 	b->nsleep->tv_nsec = MIN_DELAY;
-	while(__sync_lock_test_and_set((volatile int *) (b->atomic_val), 1)) {
+	while(__sync_lock_test_and_set((b->atomic_val), 1)) {
 		if(b->nsleep->tv_nsec < MAX_DELAY) {
 			delay = rand() % limit;
-			b->nsleep->tv_nsec = (delay < limit) ? delay : limit;
-			limit <<= 2;
+			b->nsleep->tv_nsec = delay;
+			limit = (MAX_DELAY > (limit << 2)) ? limit << 2 : MAX_DELAY;
 		}
 		nanosleep(b->nsleep, NULL);
 	}
@@ -85,15 +91,27 @@ void lock_alck(lock *l, void *args) {
 	lock_blob *b = l->l;
 
 	int *slot = (int *) args;
-	*slot = __sync_fetch_and_add((volatile int *) (b->atomic_val), 1) % b->size;
+	*slot = __sync_fetch_and_add(b->atomic_val, 1) % b->size;
 	while(!b->flags[*slot]) {
+		sched_yield();
+	}
+}
+
+void lock_clhq(lock *l, void *args) {
+	lock_blob *b = l->l;
+
+	qnode *q = (qnode *) args;
+
+	*q->node = 1;
+	q->pred = __sync_lock_test_and_set(b->tail, q->node);
+	while(*q->pred) {
 		sched_yield();
 	}
 }
 
 void unlock_ttas(lock *l) {
 	lock_blob *b = l->l;
-	__sync_lock_release((volatile int *) (b->atomic_val));
+	__sync_lock_release(b->atomic_val);
 }
 
 void unlock_mutx(lock *l) {
@@ -109,6 +127,20 @@ void unlock_alck(lock *l, void *args) {
 	b->flags[(*slot + 1) % b->size] = 1;
 }
 
+void unlock_clhq(lock *l, void *args) {
+	qnode *q = (qnode *) args;
+
+	*q->node = 0;
+	q->node = q->pred;
+}
+
+qnode *init_qnode() {
+	qnode *q = malloc(sizeof(qnode));
+	q->node = calloc(1, sizeof(int));
+	q->pred = NULL;
+	return(q);
+}
+
 lock *init_lock(int type, void *args) {
 	lock *l = malloc(sizeof(lock));
 	l->type = type;
@@ -117,6 +149,7 @@ lock *init_lock(int type, void *args) {
 	// create the lock type
 	switch(type) {
 		case TTAS:
+		case CLHQ:
 			l->l = init_ttas();
 			break;
 		case BACK:
@@ -127,10 +160,6 @@ lock *init_lock(int type, void *args) {
 			break;
 		case ALCK:
 			l->l = init_alck(args);
-			break;
-		case CLHQ:
-			break;
-		case MCSQ:
 			break;
 	}
 
@@ -150,6 +179,9 @@ int l_lock(lock *l, void *args) {
 			break;
 		case ALCK:
 			lock_alck(l, args);
+			break;
+		case CLHQ:
+			lock_clhq(l, args);
 			break;
 	}
 
@@ -174,6 +206,9 @@ int l_unlock(lock *l, void *args) {
 			break;
 		case ALCK:
 			unlock_alck(l, args);
+			break;
+		case CLHQ:
+			unlock_clhq(l, args);
 			break;
 	}
 

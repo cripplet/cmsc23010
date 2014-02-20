@@ -21,9 +21,11 @@ typedef struct lock_t {
 
 /* QNode object as defined in Herlihy */
 typedef struct qnode_t {
-	int *my_node;
-	int *my_pred;
+	volatile int *node;
+	volatile int *pred;
 } qnode;
+
+qnode *init_qnode();
 
 lock *init_lock(int type, void *args);
 int l_lock(lock *l, void *args);

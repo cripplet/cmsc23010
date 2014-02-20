@@ -21,7 +21,8 @@ int main(int argc, char **argv) {
 				test_lock(TTAS) &
 				test_lock(BACK) &
 				test_lock(MUTX) &
-				test_lock(ALCK));
+				test_lock(ALCK) &
+				test_lock(CLHQ));
 			fprintf(stderr, "test_lock: %s\n", !result ? "PASS" : "FAIL");
 			return(result);
 		case IDLE:
