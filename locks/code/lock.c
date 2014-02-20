@@ -56,7 +56,9 @@ void *init_alck(void *args) {
 
 void lock_ttas(lock *l) {
 	lock_blob *b = l->l;
-	while(__sync_lock_test_and_set((volatile int *) (b->atomic_val), 1));
+	while(__sync_lock_test_and_set((volatile int *) (b->atomic_val), 1)) {
+		sched_yield();
+	}
 }
 
 void lock_back(lock *l) {
@@ -83,8 +85,10 @@ void lock_alck(lock *l, void *args) {
 	lock_blob *b = l->l;
 
 	int *slot = (int *) args;
-	*slot = __sync_add_and_fetch((volatile int *) (b->atomic_val), 1) % b->size;
-	while(!b->flags[*slot]);
+	*slot = __sync_fetch_and_add((volatile int *) (b->atomic_val), 1) % b->size;
+	while(!b->flags[*slot]) {
+		sched_yield();
+	}
 }
 
 void unlock_ttas(lock *l) {
@@ -100,6 +104,7 @@ void unlock_alck(lock *l, void *args) {
 	lock_blob *b = l->l;
 
 	int *slot = (int *) args;
+
 	b->flags[*slot] = 0;
 	b->flags[(*slot + 1) % b->size] = 1;
 }

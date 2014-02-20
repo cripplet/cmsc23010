@@ -5,14 +5,14 @@
 
 #include "test.h"
 
-#define COUNTERS 2
-#define COUNTER_INCREMENT 1000
+#define COUNTERS 16
+#define COUNTER_INCREMENT 100000
 #define SLEEP_WAIT 1
 
 struct test_lock_blob_t {
-	int counter;
+	volatile int counter;
 	lock *counter_lock;
-	int is_done;
+	volatile int is_done;
 };
 
 struct test_lock_blob_t *init_test_lock_blob(lock *l) {
@@ -28,7 +28,7 @@ void *counter_increment(void *args) {
 
 	int slot;
 
-	for(int i = 0; i < COUNTER_INCREMENT; i++) {
+	for(volatile int i = 0; i < COUNTER_INCREMENT; i++) {
 		l_lock(b->counter_lock, &slot);
 		b->counter++;
 		l_unlock(b->counter_lock, &slot);
@@ -50,7 +50,7 @@ int test_lock(int type) {
 	struct test_lock_blob_t *b = init_test_lock_blob(l);
 
 	pthread_t t;
-	for(int i = 0; i < COUNTERS; i++) {
+	for(volatile int i = 0; i < COUNTERS; i++) {
 		pthread_create(&t, NULL, counter_increment, b);
 	}
 
