@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <sys/time.h>
 
+#include <stdio.h>
+
 #include "tune.h"
 
 #include "lock.h"
@@ -48,6 +50,7 @@ void *init_alck(void *args) {
 	lock_blob *b = init_ttas();
 	b->size = *size;
 	b->flags = malloc(b->size * sizeof(int));
+	b->flags[0] = 1;
 	return(b);
 }
 
@@ -73,14 +76,14 @@ void lock_back(lock *l) {
 }
 
 void lock_mutx(lock *l) {
-	// pthread_mutex_lock(l->l);
+	pthread_mutex_lock(l->l);
 }
 
 void lock_alck(lock *l, void *args) {
 	lock_blob *b = l->l;
 
 	int *slot = (int *) args;
-	*slot = __sync_fetch_and_add((volatile int *) (b->atomic_val), 1) % b->size;
+	*slot = __sync_add_and_fetch((volatile int *) (b->atomic_val), 1) % b->size;
 	while(!b->flags[*slot]);
 }
 
@@ -90,7 +93,7 @@ void unlock_ttas(lock *l) {
 }
 
 void unlock_mutx(lock *l) {
-	// pthread_mutex_unlock(l->l);
+	pthread_mutex_unlock(l->l);
 }
 
 void unlock_alck(lock *l, void *args) {

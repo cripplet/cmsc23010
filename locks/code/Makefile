@@ -14,7 +14,7 @@ $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(CFLAGS) $(OBJECTS) -o $@ $(LIBS)
 
 test: clean $(EXECUTABLE)
-	valgrind ./$(EXECUTABLE) 1
+	./$(EXECUTABLE) 1
 
 run: clean $(EXECUTABLE)
 

@@ -5,8 +5,8 @@
 
 #include "test.h"
 
-#define COUNTERS 10
-#define COUNTER_INCREMENT 10000
+#define COUNTERS 2
+#define COUNTER_INCREMENT 1000
 #define SLEEP_WAIT 1
 
 struct test_lock_blob_t {
@@ -29,14 +29,14 @@ void *counter_increment(void *args) {
 	int slot;
 
 	for(int i = 0; i < COUNTER_INCREMENT; i++) {
-		l_lock(b->counter_lock->l, &slot);
+		l_lock(b->counter_lock, &slot);
 		b->counter++;
-		l_unlock(b->counter_lock->l, &slot);
+		l_unlock(b->counter_lock, &slot);
 	}
 
-	l_lock(b->counter_lock->l, &slot);
+	l_lock(b->counter_lock, &slot);
 	b->is_done++;
-	l_unlock(b->counter_lock->l, &slot);
+	l_unlock(b->counter_lock, &slot);
 
 	pthread_exit(NULL);
 	return(NULL);
@@ -58,7 +58,7 @@ int test_lock(int type) {
 
 	int result = (b->counter == COUNTERS * COUNTER_INCREMENT);
 
-	fprintf(stderr, "test_lock(%i) results: %s\n", type, result ? "MATCHED" : "DIDN'T MATCH");
+	fprintf(stderr, "test_lock(%i) results: %s (%i)\n", type, result ? "MATCHED" : "DIDN'T MATCH", b->counter);
 
 	return(!result);
 }
