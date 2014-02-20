@@ -42,5 +42,14 @@ result *parallel_firewall(int numPackets, int numSources, long mean, int uniform
 
 	r->fingerprint = d->fingerprint;
 
+	for(int i = 0; i < numSources; i++) {
+		free(workers[i]->slot);
+		free(workers[i]->queue->l);
+		free(workers[i]->queue->elem);
+		free(workers[i]->queue);
+		free(workers[i]);
+	}
+	free(workers);
+
 	return(r);
 }

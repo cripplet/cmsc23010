@@ -12,7 +12,7 @@
 
 #define HUNDRED_MS 100000
 #define MILLION 1000000
-#define PACKETS 524288
+#define PACKETS 524288 / 4
 
 void counter_1() {
 	int in_time;
@@ -148,13 +148,17 @@ void packet_1() {
 void loop(char *header, int packets, int n, long work, int uniform, int lock_mode, int strategy) {
 	float out_time = 0;
 	for(short iter = 0; iter < ITER; iter++) {
-		out_time += (parallel_firewall(packets, n, work, uniform, iter, lock_mode, strategy)->folded_time) / ITER;
+		result *r = parallel_firewall(packets / n, n, work, uniform, iter, lock_mode, strategy);
+		out_time += (r->folded_time) / ITER;
+		free(r);
 	}
 	fprintf(stderr, "%i\t%s\t%s\t%i\t%f\t%li\t%i\t%i\t%i\n", PSCL, header, "parallel", packets, out_time, work, lock_mode, strategy, n);
 
 	out_time = 0;
 	for(short iter = 0; iter < ITER; iter++) {
-		out_time += (serial_firewall(PACKETS, n, work, 1, iter)->time) / ITER;
+		result *r = serial_firewall(packets / n, n, work, 1, iter);
+		out_time += (r->time) / ITER;
+		free(r);
 	}
 	fprintf(stderr, "%i\t%s\t%s\t%i\t%f\t%li\t%i\t%i\t%i\n", PSCL, header, "serial", packets, out_time, work, lock_mode, strategy, n);
 }

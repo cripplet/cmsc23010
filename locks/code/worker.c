@@ -74,6 +74,7 @@ long process_packet(worker *w) {
 					while(!is_empty(w->peers[aux]->queue)) {
 						pkt = deq(w->peers[aux]->queue);
 						fingerprint += getFingerprint(pkt->iterations, pkt->seed);
+						free(pkt);
 					}
 					l_unlock(w->peers[aux]->queue->l, w->slot);
 					return(fingerprint);
@@ -112,7 +113,9 @@ long process_packet(worker *w) {
 				return(0);
 			}
 	}
-	return(getFingerprint(pkt->iterations, pkt->seed));
+	int fingerprint = getFingerprint(pkt->iterations, pkt->seed);
+	free(pkt);
+	return(fingerprint);
 }
 
 /**
