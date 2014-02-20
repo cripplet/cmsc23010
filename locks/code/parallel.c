@@ -1,5 +1,7 @@
 #include <pthread.h>
 
+#include <stdio.h>
+
 #include "queue.h"
 #include "worker.h"
 #include "dispatcher.h"
@@ -35,7 +37,7 @@ result *parallel_firewall(int numPackets, int numSources, long mean, int uniform
 	result *r = init_result();
 	r->time = d->time;
 
-	// what we actually want
+	// what we actually want to analyze
 	r->folded_time = d->folded_time;
 
 	r->fingerprint = d->fingerprint;

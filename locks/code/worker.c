@@ -21,6 +21,7 @@ worker *init_worker(int p_remaining, int q_size, int strategy) {
 	w->p_remaining = p_remaining;
 	w->queue = init_q(q_size);
 	w->tspec.tv_nsec = SLEEP_TIME;
+	w->tspec.tv_sec = 0;
 	return(w);
 }
 
@@ -36,9 +37,15 @@ long process_packet(worker *w) {
 	Packet_t *pkt = NULL;
 	switch(w->strategy) {
 		case LFRE:
+			while(is_empty(w->queue)) {
+				nanosleep(&w->tspec, NULL);
+			}
 			pkt = deq(w->queue);
 			break;
 		case HOMQ:
+			while(is_empty(w->queue)) {
+				nanosleep(&w->tspec, NULL);
+			}
 			l_lock(w->queue->l, w->slot);
 			pkt = deq(w->queue);
 			l_unlock(w->queue->l, w->slot);
@@ -46,21 +53,34 @@ long process_packet(worker *w) {
 		case RNDQ:
 			aux = rand() % w->num_peers;
 			l_lock(w->peers[aux]->queue->l, w->slot);
+			if(is_empty(w->peers[aux]->queue)) {
+				l_unlock(w->peers[aux]->queue->l, w->slot);
+				nanosleep(&w->tspec, NULL);
+				return(0);
+			}
 			pkt = deq(w->peers[aux]->queue);
 			l_unlock(w->peers[aux]->queue->l, w->slot);
 			break;
 		case LSTQ:
-			while(!aux) {
-				for(int i = 0; i < w->num_peers; i++) {
-					if(!l_try(w->peers[i]->queue->l)) {
-						aux = 1;
-						l_lock(w->peers[i]->queue->l, w->slot);
-						pkt = deq(w->peers[i]->queue);
-						l_unlock(w->peers[i]->queue->l, w->slot);
+			for(int tries = 0; tries < 5; tries++) {
+				aux = rand() % w->num_peers;
+				if(!l_try(w->peers[aux]->queue->l)) {
+					l_lock(w->peers[aux]->queue->l, w->slot);
+					long fingerprint = 0;
+					// delay a while just in case there are more packets
+					if(w->peers[aux]->p_remaining) {
+						nanosleep(&w->tspec, NULL);
 					}
+					while(!is_empty(w->peers[aux]->queue)) {
+						pkt = deq(w->peers[aux]->queue);
+						fingerprint += getFingerprint(pkt->iterations, pkt->seed);
+					}
+					l_unlock(w->peers[aux]->queue->l, w->slot);
+					return(fingerprint);
 				}
 			}
-			break;
+			nanosleep(&w->tspec, NULL);
+			return(0);
 		case AWSM:
 			break;
 	}
@@ -71,20 +91,20 @@ long process_packet(worker *w) {
  * Main worker thread -- procesess w->p_remaining packets
  */
 void *execute_worker(void *args) {
-	// initial random seed
-	srand(time(NULL));
-
 	worker *w = args;
 
 	// there is work to be done until there are no more incoming packets from the dispatcher (p_remaining)
 	//	and the queue is empty
 	int w_done = 0;
-	while(w_done < w->num_peers) {
+	while(w_done < w->num_peers && (w->p_remaining || !is_empty(w->queue))) {
 		w_done = 0;
 		w->fingerprint += process_packet(w);
-		for(int i = 0; i < w->num_peers; i++) {
-			w_done += (!w->peers[i]->p_remaining && is_empty(w->peers[i]->queue));
+		if(!w->p_remaining && is_empty(w->queue)) {
+			for(int i = 0; i < w->num_peers; i++) {
+				w_done += (!w->peers[i]->p_remaining && is_empty(w->peers[i]->queue));
+			}
 		}
+		// fprintf(stderr, "w_done %i, p_r %i, empty %i\n", w_done, w->p_remaining, is_empty(w->queue));
 	}
 
 	// signal to the dispatcher that this worker is done

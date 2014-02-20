@@ -3,6 +3,7 @@
 
 #include "lock.h"
 
+int test_strategy(int);
 int test_lock(int);
 
 #endif

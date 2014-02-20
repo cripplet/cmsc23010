@@ -3,6 +3,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include "result.h"
+#include "serial.h"
+#include "parallel.h"
+
 #include "test.h"
 
 #define COUNTERS 16
@@ -42,6 +46,23 @@ void *counter_increment(void *args) {
 	return(NULL);
 }
 
+int test_strategy(int strategy) {
+	int t = 10000;
+	int n = COUNTERS;
+	long w = 8000;
+	int uniform_flag = 1;
+	short i = 1;
+
+	result *p = serial_firewall(t, n, w, uniform_flag, i);
+	result *q = parallel_firewall(t, n, w, uniform_flag, i, BACK, strategy);
+
+	int success = (p->fingerprint == q->fingerprint);
+
+	fprintf(stderr, "test_strategy(%i) results: %s (%li)\n", strategy, success ? "MATCHED" : "DIDN'T MATCH", q->fingerprint);
+
+	return(!success);
+}
+
 int test_lock(int type) {
 	int lock_size = COUNTERS;
 
@@ -56,9 +77,9 @@ int test_lock(int type) {
 
 	while(b->is_done != COUNTERS);
 
-	int result = (b->counter == COUNTERS * COUNTER_INCREMENT);
+	int success = (b->counter == COUNTERS * COUNTER_INCREMENT);
 
-	fprintf(stderr, "test_lock(%i) results: %s (%i)\n", type, result ? "MATCHED" : "DIDN'T MATCH", b->counter);
+	fprintf(stderr, "test_lock(%i) results: %s (%i)\n", type, success ? "MATCHED" : "DIDN'T MATCH", b->counter);
 
-	return(!result);
+	return(!success);
 }
