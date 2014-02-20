@@ -58,7 +58,7 @@ int test_strategy(int strategy) {
 
 	int success = (p->fingerprint == q->fingerprint);
 
-	fprintf(stderr, "test_strategy(%i) results: %s (%li / %li)\n", strategy, success ? "MATCHED" : "DIDN'T MATCH", q->fingerprint, p->fingerprint);
+	fprintf(stderr, "test_strategy(%i) results: %s (%li / %li): %f\n", strategy, success ? "MATCHED" : "DIDN'T MATCH", q->fingerprint, p->fingerprint, q->folded_time);
 
 	return(!success);
 }

@@ -84,26 +84,32 @@ long process_packet(worker *w) {
 		// do work on own queue until the queue is empty --
 		//	then search in an orderly manner for empty queue
 		case AWSM:
-			if(is_empty(w->queue)) {
-				nanosleep(&w->tspec, NULL);
-			}
-			if(is_empty(w->queue)) {
-				for(int i = 0; i < w->num_peers; i++) {
-					l_lock(w->peers[i]->queue->l, w->slot);
-					if(!is_empty(w->peers[i]->queue)) {
-						pkt = deq(w->peers[i]->queue);
-						l_unlock(w->peers[i]->queue->l, w->slot);
-						return(getFingerprint(pkt->iterations, pkt->seed));
-					}
-					l_unlock(w->peers[i]->queue->l, w->slot);
+			l_lock(w->queue->l, w->slot);
+			for(int tries = 0; tries < 3; tries++) {
+				if(is_empty(w->queue)) {
 					nanosleep(&w->tspec, NULL);
+				} else {
+					pkt = deq(w->queue);
+					break;
 				}
+			}
+			l_unlock(w->queue->l, w->slot);
+			if(pkt == NULL) {
+				for(int tries = 0; tries < 1; tries++) {
+					aux = rand() % w->num_peers;
+					l_lock(w->peers[aux]->queue->l, w->slot);
+					if(is_empty(w->peers[aux]->queue)) {
+						nanosleep(&w->tspec, NULL);
+					} else {
+						pkt = deq(w->peers[aux]->queue);
+						l_unlock(w->peers[aux]->queue->l, w->slot);
+						break;
+					}
+					l_unlock(w->peers[aux]->queue->l, w->slot);
+				}
+			}
+			if(pkt == NULL) {
 				return(0);
-			} else {
-				l_lock(w->queue->l, w->slot);
-				pkt = deq(w->queue);
-				l_unlock(w->queue->l, w->slot);
-				break;
 			}
 	}
 	return(getFingerprint(pkt->iterations, pkt->seed));
