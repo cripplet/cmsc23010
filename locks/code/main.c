@@ -55,8 +55,8 @@ int main(int argc, char **argv) {
 			break;
 
 		case PSCL:
-			// packet_2();
-			// packet_3();
+			packet_2();
+			packet_3();
 			packet_4();
 			break;
 		case TUNE:
