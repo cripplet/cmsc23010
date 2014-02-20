@@ -116,9 +116,10 @@ void counter_5() {
 			float mean = tmp_count / CORES;
 			float variance = 0;
 			for(int i = 0; i < counter_5_result->n; i++) {
-				variance += pow(counter_5_result->contributions[i] - mean, 2);
+				variance += pow(counter_5_result->contributions[i] - mean, 2) / mean;
+				counter_5_result->contributions[i] = 0;
 			}
-			std_dev += variance / ITER;
+			std_dev += sqrt(variance) / ITER;
 		}
 		fprintf(stderr, "%i\t%s\t%f\t%f\t%i\n", FAIR, "COUNTER_5", out_count, std_dev, lock_mode);
 	}
