@@ -12,3 +12,4 @@ cd $CD
 ./lock 8 2> $CD/FAIR.tsv
 ./lock 16 2> $CD/POHD.tsv
 ./lock 32 2> $CD/PSCL.tsv
+# ./lock 0 2> $CD/CSTM.tsv

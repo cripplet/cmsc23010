@@ -40,5 +40,6 @@ void packet_3();
 void packet_4();
 
 void tune();
+void custom();
 
 #endif

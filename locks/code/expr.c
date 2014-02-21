@@ -106,22 +106,26 @@ void counter_5() {
 	int lock_mode;
 	float out_count;
 	float std_dev;
-	for(int m = 0; m < 5; m++) {
-		lock_mode = pow(2, m);
-		out_count = 0;
-		std_dev = 0;
-		for(int iter = 0; iter < ITER; iter++) {
-			int tmp_count = time_counter_parallel(HUNDRED_MS, counter_5_result->n, lock_mode);
-			out_count += tmp_count / ITER;
-			float mean = tmp_count / counter_5_result->n;
-			float variance = 0;
-			for(int i = 0; i < counter_5_result->n; i++) {
-				variance += pow(counter_5_result->contributions[i] - mean, 2) / counter_5_result->n;
-				counter_5_result->contributions[i] = 0;
+	int in_time;
+	for(int t = 8; t <= 18; t++) {
+		for(int m = 0; m < 5; m++) {
+			in_time = pow(2, t);
+			lock_mode = pow(2, m);
+			out_count = 0;
+			std_dev = 0;
+				for(int iter = 0; iter < ITER; iter++) {
+				int tmp_count = time_counter_parallel(in_time, counter_5_result->n, lock_mode);
+				out_count += tmp_count / ITER;
+				float mean = tmp_count / counter_5_result->n;
+				float variance = 0;
+				for(int i = 0; i < counter_5_result->n; i++) {
+					variance += pow(counter_5_result->contributions[i] - mean, 2) / counter_5_result->n;
+					counter_5_result->contributions[i] = 0;
+				}
+				std_dev += sqrt(variance) / ITER;
 			}
-			std_dev += sqrt(variance) / ITER;
+			fprintf(stderr, "%i\t%s\t%i\t%f\t%f\t%i\n", FAIR, "COUNTER_5", in_time, out_count, std_dev, lock_mode);
 		}
-		fprintf(stderr, "%i\t%s\t%f\t%f\t%i\n", FAIR, "COUNTER_5", out_count, std_dev, lock_mode);
 	}
 }
 
@@ -238,4 +242,12 @@ void tune() {
 			fprintf(stderr, "%s\t%f\t%i\t%i\n", "TUNE", out_count, min_delay, max_delay);
 		}
 	}
+}
+
+void custom() {
+	float out_time = 0;
+	for(short iter = 0; iter < ITER; iter++) {
+		out_time += work_counter_serial(MILLION) / ITER;
+	}
+	fprintf(stderr, "%f\n", out_time);
 }

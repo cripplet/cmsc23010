@@ -61,6 +61,9 @@ int main(int argc, char **argv) {
 			break;
 		case TUNE:
 			tune();
+			break;
+		default:
+			custom();
 	}
 	return(0);
 }
