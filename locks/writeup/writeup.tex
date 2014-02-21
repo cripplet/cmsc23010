@@ -162,6 +162,142 @@ multiple threads to call \code{dequeue()} on a queue simultaneously. This is onl
 the exponentially distributed packet case. We will therefore expect the \ti{awesome} strategy to emphasize high number of threads using the queue-based lock, and 
 with some work-stealing scheduling implemented.
 
+\section{Data \& Analysis}
+
+\cpart{Idle Overhead}
+
+\begin{table}
+\begin{center}
+	\begin{tabular}{ r | c c }
+		lock		&	$R_T$	&	$R_W$	\\
+		\hline
+		test and set	&	0.108	&	0.020	\\
+		backoff		&	0.100	&	0.021	\\
+		pthread mutex	&	0.132	&	0.025	\\
+		Anderson	&	0.221	&	0.045	\\
+		CLS		&	0.200	&	0.044	\\
+	\end{tabular}
+\end{center}
+\caption{Performance ratios for the parallel time-limit based counter ($R_T$) and parallel work-limit based counter ($R_W$) for a variety of lock schemas, as compared to the serial counters.}
+\label{idle_table}
+\end{table}
+
+\cpart{Lock Scaling}
+
+\begin{figure}
+\begin{center}
+	\includegraphics[scale=.8]{counter_3.png}
+	\caption{Performance ratios for the parallel time-limit based counter for different lock schemas, as compared to the serial implementation.}
+	\label{counter_3}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+	\includegraphics[scale=.8]{counter_4.png}
+	\caption{Performance ratios for the parallel work-limit based counter for different lock schemas, as compared to the serial implementation.}
+	\label{counter_4}
+\end{center}
+\end{figure}
+
+\cpart{Fairness}
+
+\begin{figure}
+\begin{center}
+	\includegraphics[scale=.8]{counter_5.png}
+	\caption{Throughput as a function of the standard deviation of worker contributions in the time-limit based counter.}
+	\label{counter_5}
+\end{center}
+\end{figure}
+
+\cpart{Packet Overhead}
+
+\begin{figure}
+\begin{center}
+	\includegraphics[scale=.8]{packet_1.png}
+	\caption{Performance ratios for the \code{HomeQueue} firewall as compared to the \code{LockFree} implementation, as a function of the work involved per packet.}
+	\label{packet_1}
+\end{center}
+\end{figure}
+
+\cpart{Packet Scaling}
+
+\begin{figure}
+\begin{center}
+	\includegraphics[scale=.8]{packet_2_1000.png}
+	\caption{Performance ratios for parallel firewall, with uniform packet distribution at mean work $W = 1000$.}
+	\label{packet_2_1000}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+	\includegraphics[scale=.8]{packet_2_2000.png}
+	\caption{Performance ratios for parallel firewall, with uniform packet distribution at mean work $W = 2000$.}
+	\label{packet_2_2000}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+	\includegraphics[scale=.8]{packet_2_4000.png}
+	\caption{Performance ratios for parallel firewall, with uniform packet distribution at mean work $W = 4000$.}
+	\label{packet_2_4000}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+	\includegraphics[scale=.8]{packet_2_8000.png}
+	\caption{Performance ratios for parallel firewall, with uniform packet distribution at mean work $W = 8000$.}
+	\label{packet_2_8000}
+\end{center}
+\end{figure}
+
+%----------------------------------------------
+
+\begin{figure}
+\begin{center}
+	\includegraphics[scale=.8]{packet_3_1000.png}
+	\caption{Performance ratios for parallel firewall, with exponential packet distribution at mean work $W = 1000$.}
+	\label{packet_3_1000}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+	\includegraphics[scale=.8]{packet_3_2000.png}
+	\caption{Performance ratios for parallel firewall, with exponential packet distribution at mean work $W = 2000$.}
+	\label{packet_3_2000}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+	\includegraphics[scale=.8]{packet_3_4000.png}
+	\caption{Performance ratios for parallel firewall, with exponential packet distribution at mean work $W = 4000$.}
+	\label{packet_3_4000}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+	\includegraphics[scale=.8]{packet_3_8000.png}
+	\caption{Performance ratios for parallel firewall, with exponential packet distribution at mean work $W = 8000$.}
+	\label{packet_3_8000}
+\end{center}
+\end{figure}
+
+%----------------------------------------------
+
+\begin{figure}
+\begin{center}
+	\includegraphics[scale=.8]{packet_4.png}
+	\caption{Performance ratios for parallel firewall, with exponential packet distribution and with the awesome scheduling strategy.}
+	\label{packet_4}
+\end{center}
+\end{figure}
+
 \section{Testing}
 
 The crux of the issue here, assuming the firewall was sufficiently tested in the last project, is the ability for each lock to serialize some set of operations. The 
