@@ -175,12 +175,20 @@ with some work-stealing scheduling implemented.
 		backoff		&	0.100	&	0.021	\\
 		pthread mutex	&	0.132	&	0.025	\\
 		Anderson	&	0.221	&	0.045	\\
-		CLS		&	0.200	&	0.044	\\
+		CLH		&	0.200	&	0.044	\\
 	\end{tabular}
 \end{center}
 \caption{Performance ratios for the parallel time-limit based counter ($R_T$) and parallel work-limit based counter ($R_W$) for a variety of lock schemas, as compared to the serial counters.}
 \label{idle_table}
 \end{table}
+
+We see from \figref{idle_table} that there is in fact a \ti{better} ratio for the more intricate locks (i.e., Anderson and CLH) than for the simpler locks by a 
+factor of $\sim 2$ (a figure which is consistent in the work-limited counter). Keeping in mind this is the uncontested lock, the shortest path in these 
+implementations is the TAS lock, which we had expected to have the best performance for small $n$. We surmise this is due to the specfics of our implementation of 
+the counters -- after spawning in the worker thread(s), the parallel counter dispatcher then sits in a loop testing the completion status of the child threads -- 
+the spin here consists of a \code{sched\_yield()}. It may be that due to the shortened length of the uncontested lock, \code{sched\_yield()} is being called more 
+than is optimal. To test this, we would need to rewrite the dispatcher to handle the task completion in another way -- perhaps by calling \code{nanosleep()} in a 
+fine-grained manner.
 
 \cpart{Lock Scaling}
 
@@ -200,6 +208,13 @@ with some work-stealing scheduling implemented.
 \end{center}
 \end{figure}
 
+NB: The backoff lock is tuned to $\code{MIN\_DELAY} = 1\text{ms}$, $\code{MAX\_DELAY} = 16\text{ms}$.
+
+We see a steep falloff by the TAS lock as $n$ increases, and that, surprisingly, the backoff lock surpasses the mutex lock in performance in the time-limit counter 
+-- the pthreads mutex has performance peak at $n = 2$, dropping off as the backoff lock hits a performance peak at $n = 8$. This can be explained by the fact that 
+the pthread lock is expected to work across a wide variety of architectures, whereas the backoff lock is tuned per hardware -- as a result, we would expect that the 
+tuned backoff to perform favorably in this condition.
+
 \cpart{Fairness}
 
 \begin{figure}
@@ -210,6 +225,12 @@ with some work-stealing scheduling implemented.
 \end{center}
 \end{figure}
 
+As expected, we see that the Anderson and CLH lock implementations, though quite poor in performance, ensures that threads are accessed fairly -- this is in 
+contrast to spread of the standard deviation of the TAS, mutex, and backoff locks, which has a spread of standard deviation values across several orders of 
+magnitude. We note here that, as was implicit in the previous experiments, the backoff lock hits the highest performance peaks (with a performance rati of $\sim 11$ 
+at the function maxima). We also see that the cluster of mutex data points has a spread similar to that of the TAS lock (i.e., the wide, even distribution of 
+standard deviations, as well as the relative constant throughput factor), suggesting that this particular pthread implementation may be an optimized TAS lock.
+
 \cpart{Packet Overhead}
 
 \begin{figure}
@@ -219,6 +240,13 @@ with some work-stealing scheduling implemented.
 	\label{packet_1}
 \end{center}
 \end{figure}
+
+An interesting characteristic of our implementation of this project as seen in \figref{packet_1} is that the \code{HomeQueue} (i.e. uncontested lock) has a 
+performance boost at low $W$ when compared with the \code{LockFree} implementation of the firewall -- as was the case with the \tb{idle overhead} experiment 
+results, we hypothesize that this is due to the way in which our firewall reacts to handles waiting by sleeping for a set amount of time -- the extra overhead 
+afforded by the locks may be enough of a processing buffer, such that the worker queue already is filled by the time that the worker attempts to \code{deq()}. We also 
+see that as expected, the performance overhead created by the locks approaches zero as the time spent outside the locks (i.e. processing the packet fingerprint) 
+increases due to the increased workload $W$.
 
 \cpart{Packet Scaling}
 
@@ -298,10 +326,31 @@ with some work-stealing scheduling implemented.
 \end{center}
 \end{figure}
 
+Qualtitatively, we see that as $W$ increases, locks become much more feasible as $n$ increases - we note in general the performance hit at low $W$ for $n = 16$, 
+resulting in the arch-like shape; this changes to the much more linear features at $W = 8000$, resulting in a peak speedup of $\sim 12$ for 15 workers in the 
+uniform case.
+
 \section{Testing}
 
 The crux of the issue here, assuming the firewall was sufficiently tested in the last project, is the ability for each lock to serialize some set of operations. The 
 simplest-- and perhaps the most effective-- method for testing this is to spawn $n$ threads making $m$ incrementing calls each on a shared resource, and test to see 
 at the end if the shared resource has been altered $n\times m$ times.
+
+In particular, we have implemented two test suites -- one for testing locks, and one for testing the correctness of the the parallel packet model.
+
+\begin{alltt}
+
+int test_strategy(int strategy) \{
+  ...
+  int success = (serial->fingerprint == parallel->fingerprint);
+  ...
+\}
+int test_lock(int type) \{
+  ...
+  int success = (counter->total == COUNTERS * COUNTER_INCREMENT);
+  ...
+\}
+
+\end{alltt}
 
 \end{document}
