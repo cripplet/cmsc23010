@@ -12,6 +12,7 @@ SerialList_t *  createSerialList()
 	return list;
 }
 
+// changed as per http://bit.ly/1coSuYS
 SerialList_t *  createSerialListWithItem(int key, volatile Packet_t * value)
 {
 	SerialList_t * list = (SerialList_t *)malloc(sizeof(SerialList_t));
@@ -19,6 +20,7 @@ SerialList_t *  createSerialListWithItem(int key, volatile Packet_t * value)
 	Item_t * newItem = (Item_t *)malloc(sizeof(Item_t));
 	newItem->key = key;
 	newItem->value = value;
+	newItem->next = NULL;
 	list->head = newItem;
 
 	return list;

@@ -20,6 +20,8 @@ void ht_free(hash_table *t);
 /* Table probing */
 int ht_is_full(hash_table *t);
 int ht_set_size(hash_table *t);
+int ht_acquire(hash_table *t);
+int ht_release(hash_table *t);
 int ht_resize(hash_table *t);
 int ht_add(hash_table *t, packet_source *elem);
 int ht_remove(hash_table *t, packet_source *elem);
