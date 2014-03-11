@@ -5,6 +5,8 @@
 
 #include "hash.h"
 
+// TODO -- CANNOT ADD ITEMS WITH DUPLICATE KEYS IN HASH TABLE
+
 /* Blob typedefs functions */
 typedef struct locking_blob_t {
 	int len;
@@ -106,7 +108,7 @@ int ht_is_full(hash_table *t) {
 			size = 0;
 	}
 
-	return(t->max_s > size);
+	return(t->max_s <= size);
 }
 
 int ht_resize(hash_table *t) {

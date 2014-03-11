@@ -3,29 +3,42 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "result.h"
-#include "serial.h"
-#include "parallel.h"
+// #include "result.h"
+#include "utils/packetsource.h"
+#include "hash.h"
+#include "type.h"
 
 #include "test.h"
 
-#define COUNTERS 16
-#define COUNTER_INCREMENT 100000
-#define SLEEP_WAIT 1
+#define THREADS 16
+#define WORK 1000
 
-struct test_lock_blob_t {
-	volatile int counter;
-	lock *counter_lock;
-	volatile int is_done;
-};
+int test_single_add(hash_table *t, packet_source *p);
+int test_single_del(hash_table *t);
 
-struct test_lock_blob_t *init_test_lock_blob(lock *l) {
-	struct test_lock_blob_t *blob = malloc(sizeof(struct test_lock_blob_t));
-	blob->counter = 0;
-	blob->counter_lock = l;
-	blob->is_done = 0;
-	return(blob);
+int test_hash(int type) {
+	packet_source *p = createPacketSource(WORK, THREADS, 0);
+	hash_table *t = ht_init(type, TABLE, THREADS);
+	int result = (
+		test_single_add(t, p) &
+		test_single_del(t)
+	);
+	ht_free(t);
+	deletePacketSource(p);
+	return(result);
 }
+
+int test_single_add(hash_table *t, packet_source *p) {
+	packet *pkt = (packet *) getUniformPacket(p, 0);
+	ht_add(t, 0, pkt);
+	return(ht_contains(t, 0));
+}
+int test_single_del(hash_table *t) {
+	ht_remove(t, 0);
+	return(!ht_contains(t, 0));
+}
+
+/**
 
 void *counter_increment(void *args) {
 	struct test_lock_blob_t *b = (struct test_lock_blob_t *) args;
@@ -81,3 +94,4 @@ int test_lock(int type) {
 	fprintf(stderr, "test_lock(%i) results: %s (%i / %i)\n", type, success ? "MATCHED" : "DIDN'T MATCH", b->counter, COUNTERS * COUNTER_INCREMENT);
 	return(!success);
 }
+*/

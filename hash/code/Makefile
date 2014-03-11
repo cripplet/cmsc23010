@@ -1,9 +1,9 @@
 CC=gcc
 CFLAGS=-Wall -Werror -O3 -std=gnu99
-DEV_CFLAGS=-Wall -Werror -std=gnu99 -g
+DEV_CFLAGS=-Wall -Werror -g -std=gnu99
 LIBS=-pthread -lm
 
-SOURCES=utils/*c main.c hash.c lock.c
+SOURCES=utils/*c main.c hash.c lock.c test.c
 
 OBJECTS=$(SOURCES:.c=.o)
 STABLE=hash
