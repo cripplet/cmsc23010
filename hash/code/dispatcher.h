@@ -11,6 +11,7 @@ typedef struct dispatcher_t {
 	float folded_time;
 	int uniform;
 	long fingerprint;
+	long packets;
 } dispatcher;
 
 dispatcher *init_dispatcher(int, worker **, PacketSource_t, int);

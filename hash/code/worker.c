@@ -15,7 +15,7 @@
 
 #include "worker.h"
 
-worker *init_worker(int p_remaining, int q_size, int strategy) {
+worker *init_worker(int p_remaining, int q_size, int strategy, hash_table *t) {
 	worker *w = malloc(sizeof(worker));
 	w->strategy = strategy;
 	w->fingerprint = 0;
@@ -25,6 +25,8 @@ worker *init_worker(int p_remaining, int q_size, int strategy) {
 	w->queue = init_q(q_size);
 	w->tspec.tv_nsec = SLEEP_TIME;
 	w->tspec.tv_sec = 0;
+	w->packets = 0;
+	w->t = t;
 	return(w);
 }
 

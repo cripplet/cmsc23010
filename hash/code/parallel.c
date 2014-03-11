@@ -5,13 +5,25 @@
 #include "queue.h"
 #include "worker.h"
 #include "dispatcher.h"
+#include "expr.h"
+#include "type.h"
+#include "tune.h"
+#include "hash.h"
 
 #include "parallel.h"
 
-result *parallel_firewall(int numPackets, int numSources, long mean, int uniformFlag, short experimentNumber, int lock_type, int strategy) {
+result *parallel_firewall(int log_threads, int numSources, long mean, short experimentNumber, int M, int H) {
+	int lock_type = MUTX;
+	int strategy = LFRE;
+	int numPackets = 0;
+	int uniformFlag = UNIFORM;
+
+	hash_table *t = ht_init(H, TABLE, MAX_BUCKET_SIZE);
+	ht_free(t);
+
 	worker **workers = malloc(numSources * sizeof(worker *));
 	for(int i = 0; i < numSources; i++) {
-		workers[i] = init_worker(numPackets, Q_SIZE, strategy);
+		workers[i] = init_worker(numPackets, Q_SIZE, strategy, t);
 		workers[i]->slot = init_slot(lock_type);
 		workers[i]->queue->l = init_lock(lock_type, &numSources);
 	}
@@ -35,11 +47,8 @@ result *parallel_firewall(int numPackets, int numSources, long mean, int uniform
 	pthread_join(tid, NULL);
 
 	result *r = init_result();
-	r->time = d->time;
-
 	// what we actually want to analyze
-	r->folded_time = d->folded_time;
-
+	r->packets = d->packets;
 	r->fingerprint = d->fingerprint;
 
 	for(int i = 0; i < numSources; i++) {

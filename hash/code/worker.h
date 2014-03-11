@@ -9,6 +9,8 @@
 
 #include "utils/stopwatch.h"
 
+#include "hash.h"
+
 #include "queue.h"
 
 typedef struct worker_t {
@@ -26,9 +28,11 @@ typedef struct worker_t {
 	int is_done;
 	struct timespec tspec;
 
+	hash_table *t;
+	long packets;
 } worker;
 
-worker *init_worker(int, int, int);
+worker *init_worker(int, int, int, hash_table *t);
 
 void *execute_worker(void *);
 

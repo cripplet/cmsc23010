@@ -13,6 +13,7 @@ dispatcher *init_dispatcher(int sources, worker **workers, PacketSource_t pks, i
 	d->folded_time = 0;
 	d->uniform = uniform_flag;
 	d->fingerprint = 0;
+	d->packets = 0;
 
 	return(d);
 }
@@ -49,6 +50,7 @@ void *execute_dispatcher(void *args) {
 	d->folded_time = getElapsedTime(&watch);
 
 	for(int i = 0; i < d->sources; i++) {
+		d->packets += d->workers[i]->packets;
 		d->fingerprint += d->workers[i]->fingerprint;
 	}
 
