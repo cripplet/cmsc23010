@@ -11,5 +11,6 @@
 
 /* Heuristics */
 #define TABLE 1
+#define CONST 2
 
 #endif

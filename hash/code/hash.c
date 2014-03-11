@@ -7,8 +7,6 @@
 
 #include "hash.h"
 
-// TODO -- CANNOT ADD ITEMS WITH DUPLICATE KEYS IN HASH TABLE
-
 /* Blob typedefs functions */
 typedef struct locking_blob_t {
 	int len;
@@ -18,7 +16,6 @@ typedef struct locking_blob_t {
 typedef struct lockfreec_blob_t {
 	int len;
 	pthread_mutex_t *locks;
-	pthread_mutexattr_t *attrs;
 } lockfreec_blob;
 
 typedef struct linear_blob_t {
@@ -42,12 +39,8 @@ lockfreec_blob *ht_lockfreec_blob_init(int log_threads) {
 	lockfreec_blob *b = malloc(sizeof(lockfreec_blob));
 	b->len = log_threads;
 	b->locks = malloc(log_threads * sizeof(pthread_mutex_t));
-	b->attrs = malloc(log_threads * sizeof(pthread_mutexattr_t));
-	/* Set reentrant locks */
 	for(int i = 0; i < log_threads; i++) {
-		pthread_mutexattr_init(&b->attrs[i]);
-		pthread_mutexattr_settype(&b->attrs[i], PTHREAD_MUTEX_RECURSIVE);
-		pthread_mutex_init(&b->locks[i], &b->attrs[i]);
+		pthread_mutex_init(&b->locks[i], NULL);
 	}
 	return(b);
 }
@@ -59,7 +52,6 @@ void ht_locking_blob_free(locking_blob *b) {
 
 void ht_lockfreec_blob_free(lockfreec_blob *b) {
 	free(b->locks);
-	free(b->attrs);
 	free(b);
 }
 
@@ -103,11 +95,6 @@ hash_table *ht_init(int type, int heur, int log_threads) {
 	}
 
 	t->mask = log_threads - 1;
-
-
-	pthread_rwlock_init(&t->lock, NULL);
-
-
 	return(t);
 }
 
@@ -134,10 +121,15 @@ void ht_free(hash_table *t) {
 
 /* Table probing */
 int ht_is_full(hash_table *t) {
-	int size;
+	int size = 0;
 	switch(t->heur) {
 		case TABLE:
 			size = t->size;
+			break;
+		case CONST:
+			for(int i = 0; i < t->len; i++) {
+				size = (size > t->buckets[i]->size) ? size : t->buckets[i]->size;
+			}
 			break;
 		default:
 			size = 0;
@@ -167,6 +159,7 @@ int ht_resize(hash_table *t) {
 			for(int i = 0; i < lockfreec_b->len; i++) {
 				pthread_mutex_lock(&lockfreec_b->locks[i]);
 			}
+			break;
 		default:
 			break;
 	}
@@ -204,6 +197,7 @@ int ht_resize(hash_table *t) {
 		if(success) {
 			switch(t->heur) {
 				case TABLE:
+				case CONST:
 					t->max_s <<= 1;
 					break;
 				default:
@@ -272,6 +266,9 @@ int ht_add(hash_table *t, int key, packet *elem) {
 			case TABLE:
 				t->size += 1;
 				break;
+			case CONST:
+				t->buckets[index]->size += 1;
+				break;
 			default:
 				break;
 		}
@@ -319,6 +316,9 @@ int ht_remove(hash_table *t, int key) {
 		switch(t->heur) {
 			case TABLE:
 				t->size -= 1;
+				break;
+			case CONST:
+				t->buckets[index]->size -= 1;
 				break;
 			default:
 				break;
