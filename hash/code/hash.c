@@ -244,17 +244,12 @@ int ht_add(hash_table *t, int key, packet *elem) {
 	lockfreec_blob *lockfreec_b;
 
 	int old_len = t->len;
-
 	int index = key & t->mask;
 
 	switch(t->type) {
 		case LOCKING:
 			locking_b = t->b;
 			pthread_rwlock_wrlock(&locking_b->locks[index % locking_b->len]);
-			if(old_len != t->len) {
-				pthread_rwlock_unlock(&locking_b->locks[index % locking_b->len]);
-				return(ht_add(t, key, elem));
-			}
 			break;
 		case LOCKFREEC:
 			lockfreec_b = t->b;
@@ -262,6 +257,21 @@ int ht_add(hash_table *t, int key, packet *elem) {
 			break;
 		default:
 			break;
+	}
+	if(old_len != t->len) {
+		switch(t->type) {
+			case LOCKING:
+				locking_b = t->b;
+				pthread_rwlock_unlock(&locking_b->locks[index % locking_b->len]);
+				break;
+			case LOCKFREEC:
+				lockfreec_b = t->b;
+				pthread_mutex_unlock(&lockfreec_b->locks[index % lockfreec_b->len]);
+				break;
+			default:
+				break;
+		}
+		return(ht_add(t, key, elem));
 	}
 	success |= !contains_list((serial_list *) t->buckets[index], key);
 	if(success) {
@@ -312,10 +322,6 @@ int ht_remove(hash_table *t, int key) {
 		case LOCKING:
 			locking_b = t->b;
 			pthread_rwlock_wrlock(&locking_b->locks[index % locking_b->len]);
-			if(old_len != t->len) {
-				pthread_rwlock_unlock(&locking_b->locks[index % locking_b->len]);
-				return(ht_remove(t, key));
-			}
 			break;
 		case LOCKFREEC:
 			lockfreec_b = t->b;
@@ -323,6 +329,21 @@ int ht_remove(hash_table *t, int key) {
 			break;
 		default:
 			break;
+	}
+	if(old_len != t->len) {
+		switch(t->type) {
+			case LOCKING:
+				locking_b = t->b;
+				pthread_rwlock_unlock(&locking_b->locks[index % locking_b->len]);
+				break;
+			case LOCKFREEC:
+				lockfreec_b = t->b;
+				pthread_mutex_unlock(&lockfreec_b->locks[index % lockfreec_b->len]);
+				break;
+			default:
+				break;
+		}
+		return(ht_remove(t, key));
 	}
 	success |= remove_list((serial_list *) t->buckets[index], key);
 	if(success) {
@@ -354,12 +375,15 @@ int ht_remove(hash_table *t, int key) {
 
 int ht_contains(hash_table *t, int key) {
 	int success = 0;
+
 	int index = key & t->mask;
 	locking_blob *locking_b;
 
 	if((index & t->mask) >= t->len) {
 		return(success);
 	}
+
+	int old_len = t->len;
 
 	switch(t->type) {
 		case LOCKING:
@@ -368,6 +392,22 @@ int ht_contains(hash_table *t, int key) {
 			break;
 		default:
 			break;
+	}
+	if(old_len != t->len) {
+		switch(t->type) {
+			case LOCKING:
+				locking_b = t->b;
+				pthread_rwlock_unlock(&locking_b->locks[index % locking_b->len]);
+				break;
+			/*case LOCKFREEC:
+				lockfreec_b = t->b;
+				pthread_mutex_unlock(&lockfreec_b->locks[index % lockfreec_b->len]);
+				break;
+			*/
+			default:
+				break;
+		}
+		return(ht_contains(t, key));
 	}
 	success |= contains_list((serial_list *) t->buckets[index], key);
 	switch(t->type) {
