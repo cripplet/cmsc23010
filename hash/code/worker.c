@@ -16,7 +16,7 @@
 
 #include "worker.h"
 
-worker *init_worker(int p_remaining, int q_size, int strategy, hash_table *t) {
+worker *init_worker(int p_remaining, int q_size, int strategy, hash_table *t, int is_dropped) {
 	worker *w = malloc(sizeof(worker));
 	w->strategy = strategy;
 	w->fingerprint = 0;
@@ -28,6 +28,7 @@ worker *init_worker(int p_remaining, int q_size, int strategy, hash_table *t) {
 	w->tspec.tv_sec = 0;
 	w->packets = 0;
 	w->t = t;
+	w->is_dropped = is_dropped;
 	return(w);
 }
 
@@ -137,7 +138,9 @@ void *execute_worker(void *args) {
 			long f = process_packet(w);
 			w->fingerprint += f;
 			// whatever
-			ht_add(w->t, f, NULL);
+			if(!w->is_dropped) {
+				ht_add(w->t, f, NULL);
+			}
 			w->p_remaining += 1;
 		}
 	}

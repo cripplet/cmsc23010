@@ -3,6 +3,6 @@
 
 #include "result.h"
 
-result *parallel_firewall(int log_threads, int numSources, long mean, short experimentNumber, int M, int H);
+result *parallel_firewall(int log_threads, int numSources, long mean, short experimentNumber, int M, int H, int is_dropped);
 
 #endif

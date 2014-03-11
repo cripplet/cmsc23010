@@ -30,9 +30,10 @@ typedef struct worker_t {
 
 	hash_table *t;
 	long packets;
+	int is_dropped;
 } worker;
 
-worker *init_worker(int, int, int, hash_table *t);
+worker *init_worker(int, int, int, hash_table *t, int is_dropped);
 
 void *execute_worker(void *);
 

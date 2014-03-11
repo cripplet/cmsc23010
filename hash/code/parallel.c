@@ -12,7 +12,7 @@
 
 #include "parallel.h"
 
-result *parallel_firewall(int log_threads, int numSources, long mean, short experimentNumber, int M, int H) {
+result *parallel_firewall(int log_threads, int numSources, long mean, short experimentNumber, int M, int H, int is_dropped) {
 	int lock_type = MUTX;
 	int strategy = LFRE;
 	int uniformFlag = UNIFORM;
@@ -21,7 +21,7 @@ result *parallel_firewall(int log_threads, int numSources, long mean, short expe
 
 	worker **workers = malloc(numSources * sizeof(worker *));
 	for(int i = 0; i < numSources; i++) {
-		workers[i] = init_worker(0, Q_SIZE, strategy, t);
+		workers[i] = init_worker(0, Q_SIZE, strategy, t, is_dropped);
 		workers[i]->slot = init_slot(lock_type);
 		workers[i]->queue->l = init_lock(lock_type, &numSources);
 	}
