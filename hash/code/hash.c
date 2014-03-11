@@ -58,7 +58,7 @@ hash_table *ht_init(int type, int heur, int log_threads) {
 	t->size = 0;
 	switch(heur) {
 		case TABLE:
-			t->max_s = log_threads << 2;
+			t->max_s = log_threads << 1;
 			break;
 		default:
 			t->max_s = 0;
@@ -74,7 +74,7 @@ hash_table *ht_init(int type, int heur, int log_threads) {
 			break;
 	}
 
-	t->mask = (1 << log_threads) - 1;
+	t->mask = log_threads - 1;
 
 	return(t);
 }
@@ -108,12 +108,13 @@ int ht_is_full(hash_table *t) {
 			size = 0;
 	}
 
-	return(t->max_s <= size);
+	return(t->max_s < size);
 }
 
 int ht_resize(hash_table *t) {
 	int success = 1;
 	locking_blob *locking_b;
+
 	// acquire all necessary locks
 	switch(t->type) {
 		case LOCKING:
@@ -126,8 +127,8 @@ int ht_resize(hash_table *t) {
 	}
 
 	/* Hash table allocation */
-	int t_len = t->len << 2;
-	int t_mask = (t->mask << 2) + 1;
+	int t_len = t->len << 1;
+	int t_mask = (t->mask << 1) + 1;
 	volatile serial_list **t_buckets = malloc(t_len * sizeof(serial_list *));
 	for(int i = 0; i < t_len; i++) {
 		t_buckets[i] = createSerialList();
@@ -138,7 +139,7 @@ int ht_resize(hash_table *t) {
 		item *curr = t->buckets[i]->head;
 		while(curr != NULL) {
 			item *next = curr->next;
-			curr->next = NULL;
+			curr->next = t_buckets[curr->key & t_mask]->head;
 			t_buckets[curr->key & t_mask]->head = curr;
 			curr = next;
 		}
@@ -146,8 +147,9 @@ int ht_resize(hash_table *t) {
 
 	/* Free old hash table */
 	for(int i = 0; i < t->len; i++) {
-		serial_list_free((serial_list *) t->buckets[i]);
+		free((serial_list *) t->buckets[i]);
 	}
+
 	free(t->buckets);
 
 	t->buckets = t_buckets;
@@ -157,7 +159,7 @@ int ht_resize(hash_table *t) {
 	if(success) {
 		switch(t->heur) {
 			case TABLE:
-				t->max_s <<= 2;
+				t->max_s <<= 1;
 				break;
 			default:
 				break;
@@ -174,6 +176,7 @@ int ht_resize(hash_table *t) {
 		default:
 			break;
 	}
+
 	return(success);
 }
 
@@ -190,7 +193,7 @@ int ht_add(hash_table *t, int key, packet *elem) {
 		default:
 			break;
 	}
-	addNoCheck_list((serial_list *) t->buckets[index], key, elem);
+	add_list((serial_list *) t->buckets[index], key, elem);
 	switch(t->type) {
 		case LOCKING:
 			locking_b = t->b;

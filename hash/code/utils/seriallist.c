@@ -1,6 +1,6 @@
-
 #include <stdlib.h>
 #include <stdio.h>
+
 #include "seriallist.h"
 
 SerialList_t *  createSerialList()
@@ -13,7 +13,7 @@ SerialList_t *  createSerialList()
 }
 
 // changed as per http://bit.ly/1coSuYS
-SerialList_t *  createSerialListWithItem(int key, volatile Packet_t * value)
+SerialList_t * createSerialListWithItem(int key, volatile Packet_t * value)
 {
 	SerialList_t * list = (SerialList_t *)malloc(sizeof(SerialList_t));
 	list->size = 1;
@@ -27,7 +27,6 @@ SerialList_t *  createSerialListWithItem(int key, volatile Packet_t * value)
 }
 
 Item_t * getItem_list(SerialList_t * list, int key){
-
 	Item_t * curr = list->head;
 
 	while(curr != NULL){
@@ -74,11 +73,11 @@ bool remove_list(SerialList_t * list, int key){
 	return false;
 }
 void add_list(SerialList_t * list, int key, volatile Packet_t * value){
-	Item_t * tmpItem = getItem_list(list,key);
+	Item_t *tmpItem = getItem_list(list, key);
 
 	if(tmpItem != NULL){
 		tmpItem->value = value;
-	}else{
+	} else {
 		Item_t * newItem = (Item_t *)malloc(sizeof(Item_t));
 		newItem->key = key;
 		newItem->value = value;
