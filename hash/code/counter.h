@@ -1,12 +1,15 @@
 #ifndef COUNTER_H
 #define COUNTER_H
+#include "tune.h"
+#include "counter.h"
 
-// M is in units of microseconds,
-int time_counter_serial(int M);
-int time_counter_parallel(int M, int n, int L);
+typedef struct signal_blob_t {
+	volatile int flags;
+} signal_blob;
 
-// the float returned by work_counter_X is in microseconds
-float work_counter_serial(int B);
-float work_counter_parallel(int B, int n, int L);
+signal_blob *b;
+
+void ALARM_handler_counter(int sig);
+signal_blob *init_signal_blob(int flags);
 
 #endif

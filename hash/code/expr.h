@@ -20,25 +20,6 @@
 #define LSTQ 8		// deq using try_lock
 #define AWSM 16
 
-typedef struct counter_result_t {
-	int n;
-	volatile int *contributions;
-} counter_result;
-
-counter_result *counter_5_result;
-
-void counter_1();
-void counter_2();
-void counter_3();
-void counter_4();
-void counter_5();
-
-void packet_1();
-void packet_2();
-void packet_3();
-void packet_4();
-
-void tune();
 void custom();
 
 #endif
