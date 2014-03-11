@@ -186,7 +186,7 @@ int ht_resize(hash_table *t) {
  * Caller is responsible for duplicate resources
  */
 int ht_add(hash_table *t, int key, packet *elem) {
-	int success = 1;
+	int success = 0;
 	int index = key & t->mask;
 	locking_blob *locking_b;
 

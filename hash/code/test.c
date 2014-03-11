@@ -108,7 +108,7 @@ int test_parallel_duplicate_add(hash_table *t, packet_source *p) {
 	int result = b->resource;
 
 	free(b);
-	printf("result is %i, of %i attempts\n", result, ATTEMPTS);
+	printf("result is %i, of %i attempts, size %i\n", result, ATTEMPTS, t->size);
 	return(result == ATTEMPTS);
 }
 
