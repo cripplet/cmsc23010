@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "test.h"
 #include "type.h"
 #include "hash.h"
 
@@ -16,11 +17,11 @@ int main(int argc, char **argv) {
 	switch(mode) {
 		case TEST:
 			fprintf(stderr, "running tests\n");
-			int result = (1
+			int result = (
 			);
 			fprintf(stderr, "test results: %s\n", !result ? "PASS" : "FAIL");
 
-			hash_table *t = ht_init(LOCKING, 0, 5);
+			hash_table *t = ht_init(LOCKING, TABLE, 5);
 			ht_free(t);
 
 			return(result);

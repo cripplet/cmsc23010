@@ -6,7 +6,7 @@
 
 typedef struct Item {
 	int key;
-	 volatile Packet_t * value;
+	volatile Packet_t * value;
 	struct Item * next;
 }Item_t;
 

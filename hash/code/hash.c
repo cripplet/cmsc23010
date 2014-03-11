@@ -1,4 +1,6 @@
-#include "lock.h"
+#include <pthread.h>
+
+#include "utils/packetsource.h"
 #include "type.h"
 
 #include "hash.h"
@@ -6,7 +8,7 @@
 /* Blob typedefs functions */
 typedef struct locking_blob_t {
 	int len;
-	read_write_lock **locks;
+	pthread_rwlock_t *locks;
 } locking_blob;
 
 typedef struct lockfree_blob_t {
@@ -19,41 +21,59 @@ typedef struct awesome_blob_t {
 } awesome_blob;
 
 /* Blob housekeeping functions */
-locking_blob *ht_locking_blob_init(int max_s) {
+locking_blob *ht_locking_blob_init(int log_threads) {
 	locking_blob *b = malloc(sizeof(locking_blob));
-	b->len = max_s;
-	b->locks = malloc(max_s * sizeof(read_write_lock *));
-	for(int i = 0; i < max_s; i++) {
-		b->locks[i] = read_write_lock_init();
+	b->len = log_threads;
+	b->locks = malloc(log_threads * sizeof(pthread_rwlock_t));
+	for(int i = 0; i < log_threads; i++) {
+		pthread_rwlock_init(&b->locks[i], NULL);
 	}
 	return(b);
 }
 
 void ht_locking_blob_free(locking_blob *b) {
-	for(int i = 0; i < b->len; i++) {
-		read_write_lock_free(b->locks[i]);
-	}
 	free(b->locks);
 	free(b);
 }
 
 /* Auxiliary function headers */
-int ht_find(hash_table *t, packet_source *elem, int remove);
+void serial_list_free(serial_list *l);
 
 /* Memory allocation */
-hash_table *ht_init(int type, int heur, int max_s) {
+hash_table *ht_init(int type, int heur, int log_threads) {
 	hash_table *t = malloc(sizeof(hash_table));
 	t->type = type;
 	t->heur = heur;
+
+	/* Hash table allocation */
+	t->len = log_threads;
+	t->buckets = malloc(log_threads * sizeof(serial_list *));
+	for(int i = 0; i < log_threads; i++) {
+		t->buckets[i] = createSerialList();
+	}
+
+	/* Set size constraints */
 	t->size = 0;
-	t->max_s = max_s;
+	switch(heur) {
+		case TABLE:
+			t->max_s = log_threads << 2;
+			break;
+		default:
+			t->max_s = 0;
+			break;
+	}
+
 	switch(type) {
 		case LOCKING:
-			t->b = ht_locking_blob_init(max_s);
+			t->b = ht_locking_blob_init(log_threads);
 			break;
 		default:
 			t->b = NULL;
+			break;
 	}
+
+	t->mask = (1 << log_threads) - 1;
+
 	return(t);
 }
 
@@ -65,84 +85,201 @@ void ht_free(hash_table *t) {
 		default:
 			break;
 	}
+
+	/* Hash table freeing */
+	for(int i = 0; i < t->len; i++) {
+		serial_list_free((serial_list *) t->buckets[i]);
+	}
+	free(t->buckets);
+
 	free(t);
 }
 
 /* Table probing */
 int ht_is_full(hash_table *t) {
-	return(t->max_s >= t->size);
-}
-
-/* Sets the current size of the hash table */
-int ht_set_size(hash_table *t) {
-	int success = 0;
-	int size = t->size;
-	switch(t->type) {
-		default:
+	int size;
+	switch(t->heur) {
+		case TABLE:
+			size = t->size;
 			break;
-	}
-	if(success) {
-		t->size = size;
-	}
-	return(success);
-}
-
-int ht_acquire(hash_table *t) {
-	switch(t->type) {
 		default:
-			break;
+			size = 0;
 	}
-	return(1);
-}
 
-int ht_release(hash_table *t) {
-	switch(t->type) {
-		default:
-			break;
-	}
-	return(1);
+	return(t->max_s > size);
 }
 
 int ht_resize(hash_table *t) {
-	int success = 0;
+	int success = 1;
+	locking_blob *locking_b;
+	// acquire all necessary locks
 	switch(t->type) {
+		case LOCKING:
+			locking_b = t->b;
+			for(int i = 0; i < locking_b->len; i++) {
+				pthread_rwlock_wrlock(&locking_b->locks[i]);
+			}
 		default:
 			break;
 	}
+
+	/* Hash table allocation */
+	int t_len = t->len << 2;
+	int t_mask = (t->mask << 2) + 1;
+	volatile serial_list **t_buckets = malloc(t_len * sizeof(serial_list *));
+	for(int i = 0; i < t_len; i++) {
+		t_buckets[i] = createSerialList();
+	}
+
+	/* Copy data */
+	for(int i = 0; i < t->len; i++) {
+		item *curr = t->buckets[i]->head;
+		while(curr != NULL) {
+			item *next = curr->next;
+			curr->next = NULL;
+			t_buckets[curr->key & t_mask]->head = curr;
+			curr = next;
+		}
+	}
+
+	/* Free old hash table */
+	for(int i = 0; i < t->len; i++) {
+		serial_list_free((serial_list *) t->buckets[i]);
+	}
+	free(t->buckets);
+
+	t->buckets = t_buckets;
+	t->len = t_len;
+	t->mask = t_mask;
+
 	if(success) {
-		t->max_s <<= 2;
+		switch(t->heur) {
+			case TABLE:
+				t->max_s <<= 2;
+				break;
+			default:
+				break;
+		}
+	}
+
+	// release the locks
+	switch(t->type) {
+		case LOCKING:
+			locking_b = t->b;
+			for(int i = 0; i < locking_b->len; i++) {
+				pthread_rwlock_unlock(&locking_b->locks[i]);
+			}
+		default:
+			break;
 	}
 	return(success);
 }
 
-int ht_add(hash_table *t, packet_source *elem) {
-	int success = 0;
+int ht_add(hash_table *t, int key, packet *elem) {
+	int success = 1;
+	int index = key & t->mask;
+	locking_blob *locking_b;
+
 	switch(t->type) {
+		case LOCKING:
+			locking_b = t->b;
+			pthread_rwlock_wrlock(&locking_b->locks[index % locking_b->len]);
+			break;
 		default:
 			break;
 	}
+	addNoCheck_list((serial_list *) t->buckets[index], key, elem);
+	switch(t->type) {
+		case LOCKING:
+			locking_b = t->b;
+			pthread_rwlock_unlock(&locking_b->locks[index % locking_b->len]);
+			break;
+		default:
+			break;
+	}
+
+	switch(t->heur) {
+		case TABLE:
+			t->size += 1;
+			break;
+		default:
+			break;
+	}
+
 	// resize table if necessary
 	if(ht_is_full(t)) {
 		success &= ht_resize(t);
 	}
-	success &= ht_set_size(t);
 	return(success);
 }
 
-int ht_remove(hash_table *t, packet_source *elem) {
-	return(ht_find(t, elem, 1));
-}
-
-int ht_contains(hash_table *t, packet_source *elem) {
-	return(ht_find(t, elem, 0));
-}
-
-int ht_find(hash_table *t, packet_source *elem, int remove) {
+int ht_remove(hash_table *t, int key) {
 	int success = 0;
+	int index = key & t->mask;
+	locking_blob *locking_b;
+
+	if((index & t->mask) >= t->len) {
+		return(success);
+	}
+
 	switch(t->type) {
+		case LOCKING:
+			locking_b = t->b;
+			pthread_rwlock_wrlock(&locking_b->locks[index % locking_b->len]);
+			break;
 		default:
 			break;
 	}
-	ht_set_size(t);
+	success |= remove_list((serial_list *) t->buckets[index], key);
+	switch(t->type) {
+		case LOCKING:
+			locking_b = t->b;
+			pthread_rwlock_unlock(&locking_b->locks[index % locking_b->len]);
+			break;
+		default:
+			break;
+	}
 	return(success);
+}
+
+int ht_contains(hash_table *t, int key) {
+	int success = 0;
+	int index = key & t->mask;
+	locking_blob *locking_b;
+
+	if((index & t->mask) >= t->len) {
+		return(success);
+	}
+
+	switch(t->type) {
+		case LOCKING:
+			locking_b = t->b;
+			pthread_rwlock_rdlock(&locking_b->locks[index % locking_b->len]);
+			break;
+		default:
+			break;
+	}
+	success |= contains_list((serial_list *) t->buckets[index], key);
+	switch(t->type) {
+		locking_blob *locking_b;
+		case LOCKING:
+			locking_b = t->b;
+			pthread_rwlock_unlock(&locking_b->locks[index % locking_b->len]);
+			break;
+		default:
+			break;
+	}
+	return(success);
+}
+
+void serial_list_free(serial_list *l) {
+	item *i = l->head;
+	item *temp;
+	while(i != NULL) {
+		temp = i->next;
+		free((packet *) i->value);
+		free(i);
+		i = temp;
+	}
+	free(l);
 }

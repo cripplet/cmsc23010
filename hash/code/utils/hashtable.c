@@ -14,7 +14,6 @@ SerialHashTable_t * createSerialHashTable(int logSize, int maxBucketSize)
 	htable->table = (SerialList_t **)malloc(sizeof(SerialList_t*)* tableSize);
 	for(int i =0; i < tableSize; i++)
 		htable->table[i] = NULL;
-
 	return htable;
 }
 
