@@ -32,7 +32,7 @@ void ht_free(hash_table *t);
 /* Table probing */
 int ht_is_full(hash_table *t);
 int ht_set_size(hash_table *t);
-int ht_resize(hash_table *t);
+int ht_attempt_resize(hash_table *t);
 int ht_add(hash_table *t, int key, packet *elem);
 int ht_remove(hash_table *t, int key);
 int ht_contains(hash_table *t, int key);

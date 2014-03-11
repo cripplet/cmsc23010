@@ -58,6 +58,7 @@ void ht_lockfreec_blob_free(lockfreec_blob *b) {
 /* Auxiliary function headers */
 void serial_list_free(serial_list *l);
 
+
 /* Memory allocation */
 hash_table *ht_init(int type, int heur, int log_threads) {
 	hash_table *t = malloc(sizeof(hash_table));
@@ -139,7 +140,7 @@ int ht_is_full(hash_table *t) {
 	return(t->max_s < size);
 }
 
-int ht_resize(hash_table *t) {
+int ht_attempt_resize(hash_table *t) {
 	int success = 1;
 	locking_blob *locking_b;
 	lockfreec_blob *lockfreec_b;
@@ -235,21 +236,25 @@ int ht_resize(hash_table *t) {
 int ht_add(hash_table *t, int key, packet *elem) {
 	int success = 0;
 
+	while(ht_is_full(t)) {
+		success &= ht_attempt_resize(t);
+	}
+
 	locking_blob *locking_b;
 	lockfreec_blob *lockfreec_b;
 
-	int index = key & t->mask;
+	int old_len = t->len;
 
-	// resize table if necessary
-	// TODO -- Fix concurrency problems
-	while(ht_is_full(t)) {
-		success &= ht_resize(t);
-	}
+	int index = key & t->mask;
 
 	switch(t->type) {
 		case LOCKING:
 			locking_b = t->b;
 			pthread_rwlock_wrlock(&locking_b->locks[index % locking_b->len]);
+			if(old_len != t->len) {
+				pthread_rwlock_unlock(&locking_b->locks[index % locking_b->len]);
+				return(ht_add(t, key, elem));
+			}
 			break;
 		case LOCKFREEC:
 			lockfreec_b = t->b;
@@ -258,7 +263,6 @@ int ht_add(hash_table *t, int key, packet *elem) {
 		default:
 			break;
 	}
-
 	success |= !contains_list((serial_list *) t->buckets[index], key);
 	if(success) {
 		add_list((serial_list *) t->buckets[index], key, elem);
@@ -292,18 +296,26 @@ int ht_add(hash_table *t, int key, packet *elem) {
 
 int ht_remove(hash_table *t, int key) {
 	int success = 0;
+
 	int index = key & t->mask;
-	locking_blob *locking_b;
-	lockfreec_blob *lockfreec_b;
 
 	if((index & t->mask) >= t->len) {
 		return(success);
 	}
 
+	locking_blob *locking_b;
+	lockfreec_blob *lockfreec_b;
+
+	int old_len = t->len;
+
 	switch(t->type) {
 		case LOCKING:
 			locking_b = t->b;
 			pthread_rwlock_wrlock(&locking_b->locks[index % locking_b->len]);
+			if(old_len != t->len) {
+				pthread_rwlock_unlock(&locking_b->locks[index % locking_b->len]);
+				return(ht_remove(t, key));
+			}
 			break;
 		case LOCKFREEC:
 			lockfreec_b = t->b;
