@@ -10,6 +10,22 @@
 #include <pthread.h>
 #include "hashpacketworker.h"
 
+#include <stdio.h>
+
+#include "../result.h"
+#include "../queue.h"
+#include "../worker.h"
+#include "../dispatcher.h"
+#include "../expr.h"
+#include "../type.h"
+#include "../tune.h"
+#include "../expr.h"
+#include "../hash.h"
+
+#include "../parallel.h"
+
+
+
 static void millToTimeSpec(struct timespec *ts, unsigned long ms)
 {
 	ts->tv_sec = ms / 1000;
@@ -17,15 +33,7 @@ static void millToTimeSpec(struct timespec *ts, unsigned long ms)
 }
 
 
-void serialHashPacketTest(int numMilliseconds,
-							float fractionAdd,
-							float fractionRemove,
-							float hitRate,
-							int maxBucketSize,
-							long mean,
-							int initSize)
-{
-
+result *serialHashPacketTest(int numMilliseconds, float fractionAdd, float fractionRemove, float hitRate, int maxBucketSize, long mean, int initSize) {
 	StopWatch_t timer;
 
 	PaddedPrimBool_NonVolatile_t done;
@@ -63,8 +71,6 @@ void serialHashPacketTest(int numMilliseconds,
 		exit(-1);
 	}
 
-	printf("Sleeping!!");
-
 	startTimer(&timer);
 
 	nanosleep(&tim, NULL);
@@ -74,65 +80,86 @@ void serialHashPacketTest(int numMilliseconds,
 	// memFence.value = true;
 
 	 rc = pthread_join(workerThread, &status);
-	 if (rc){
+	 if (rc) {
 		 fprintf(stderr,"firewall error: return code for the threads using pthread_join() for solo thread  is %d\n", rc);
 		 exit(-1);
 	 }
 
-	 stopTimer(&timer);
+	stopTimer(&timer);
 
-	 pthread_attr_destroy(&attr);
+	pthread_attr_destroy(&attr);
 
 	long totalCount = workerData.totalPackets;
-	printf("count: %ld \n", totalCount);
-	printf("time: %f\n",getElapsedTime(&timer));
-	printf("%f inc / ms", totalCount/getElapsedTime(&timer));
+
+	result *r = init_result();
+	r->packets = totalCount;
+	r->time = getElapsedTime(&timer);
+	return(r);
 }
 
-void parallelHashPacketTest(int numMilliseconds,
-							float fractionAdd,
-							float fractionRemove,
-							float hitRate,
-							int maxBucketSize,
-							long mean,
-							int initSize,
-							int numWorkers)
+result *parallelHashPacketTest(int numMilliseconds, float fractionAdd, float fractionRemove, float hitRate, int maxBucketSize, long mean, int initSize, int numWorkers, int log_threads, int M, int H, int is_dropped)
 {
+	int numSources = numWorkers;
 	StopWatch_t timer;
-	//
-	// allocate and initialize Lamport queues and hash table
-	//
-	// HashPacketGenerator_t * source = createHashPacketGenerator(fractionAdd,fractionRemove,hitRate,mean);
-	//
-	// initialize your hash table w/ initSize number of add() calls using
-	// getAddPacket();
-	//
-	// allocate and initialize locks and any signals used to marshal threads (eg. done signals)
-	//
-	// allocate and initialize Dispatcher and Worker threads
-	//
-	// start your Workers
-	//
+
+
+	int lock_type = MUTX;
+	int strategy = LFRE;
+	int uniformFlag = UNIFORM;
+
+	hash_table *t = ht_init(H, TABLE, MAX_BUCKET_SIZE);
+
+	worker **workers = malloc(numSources * sizeof(worker *));
+	for(int i = 0; i < numSources; i++) {
+		workers[i] = init_worker(0, Q_SIZE, strategy, t, is_dropped);
+		workers[i]->slot = init_slot(lock_type);
+		workers[i]->queue->l = init_lock(lock_type, &numSources);
+	}
+
+	// give workers a way to access peer queues
+	for(int i = 0; i < numSources; i++) {
+		workers[i]->peers = workers;
+		workers[i]->num_peers = numSources;
+	}
+
+	// TODO -- fix this
+	PacketSource_t *pks = createPacketSource(mean, numSources, 0);
+	dispatcher *d = init_dispatcher(numSources, workers, *pks, uniformFlag, M);
+
+	for(int i = 0; i < numSources; i++) {
+		pthread_t tid;
+		pthread_create(&tid, NULL, execute_worker, workers[i]);
+	}
+
 	struct timespec tim;
 
 	millToTimeSpec(&tim,numMilliseconds);
 
 	startTimer(&timer);
-	//
-	// start your Dispatcher
-	//
+
+	pthread_t tid;
+	pthread_create(&tid, NULL, execute_dispatcher, d);
+
 	nanosleep(&tim , NULL);
-	//
-	// assert signals to stop Dispatcher
-	//
-	// call join on Dispatcher
-	//
-	// assert signals to stop Workers - they are responsible for leaving
-	// the queues empty
-	//
-	// call join for each Worker
-	//
+
+	pthread_join(tid, NULL);
+
 	stopTimer(&timer);
 
-	// report the total number of packets processed and total time
+	result *r = init_result();
+
+	// what we actually want to analyze
+	r->packets = d->packets;
+	r->fingerprint = d->fingerprint;
+
+	for(int i = 0; i < numSources; i++) {
+		free(workers[i]->slot);
+		free(workers[i]->queue->l);
+		free(workers[i]->queue->elem);
+		free(workers[i]->queue);
+		free(workers[i]);
+	}
+	free(workers);
+
+	return(r);
 }

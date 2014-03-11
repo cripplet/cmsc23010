@@ -20,6 +20,11 @@
 #define LSTQ 8		// deq using try_lock
 #define AWSM 16
 
+#define THREADS 4
+#define LOG_THREADS 2
+#define MEAN_WORK 1000
+#define TWO_SECONDS 2
+
 void custom();
 
 #endif
