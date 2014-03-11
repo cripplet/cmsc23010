@@ -12,6 +12,7 @@
 #include "utils/stopwatch.h"
 #include "queue.h"
 #include "expr.h"
+#include "counter.h"
 
 #include "worker.h"
 
@@ -131,14 +132,13 @@ void *execute_worker(void *args) {
 
 	// there is work to be done until there are no more incoming packets from the dispatcher (p_remaining)
 	//	and the queue is empty
-	int w_done = 0;
-	while(w_done < w->num_peers && (w->p_remaining || !is_empty(w->queue))) {
-		w_done = 0;
-		w->fingerprint += process_packet(w);
-		if(!w->p_remaining && is_empty(w->queue)) {
-			for(int i = 0; i < w->num_peers; i++) {
-				w_done += (!w->peers[i]->p_remaining && is_empty(w->peers[i]->queue));
-			}
+	while(b->flags) {
+		if(!is_empty(w->queue)) {
+			long f = process_packet(w);
+			w->fingerprint += f;
+			// whatever
+			ht_add(w->t, f, NULL);
+			w->p_remaining += 1;
 		}
 	}
 

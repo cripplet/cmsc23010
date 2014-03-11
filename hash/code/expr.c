@@ -19,13 +19,13 @@
 void custom() {
 	b = init_signal_blob(1);
 	result *r = serial_firewall(LOG_THREADS, THREADS, MEAN_WORK, 0, TWO_SECONDS);
-	fprintf(stderr, "serially hashed %li packets in 2 seconds\n", r->packets);
+	fprintf(stderr, "serially hashed %li packets in %i seconds\n", r->packets, TWO_SECONDS);
 	free(b);
 	free(r);
 
 	b = init_signal_blob(1);
 	r = parallel_firewall(LOG_THREADS, THREADS, MEAN_WORK, 0, TWO_SECONDS, LOCKING);
-	fprintf(stderr, "parallel hashed %li packets in 2 seconds\n", r->packets);
+	fprintf(stderr, "parallel hashed %li packets in %i seconds (thread == %i)\n", r->packets, TWO_SECONDS, THREADS);
 	free(b);
 	free(r);
 }

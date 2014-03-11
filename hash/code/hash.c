@@ -262,6 +262,7 @@ int ht_add(hash_table *t, int key, packet *elem) {
 	success |= !contains_list((serial_list *) t->buckets[index], key);
 	if(success) {
 		add_list((serial_list *) t->buckets[index], key, elem);
+
 		switch(t->heur) {
 			case TABLE:
 				t->size += 1;

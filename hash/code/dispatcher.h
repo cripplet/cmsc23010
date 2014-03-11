@@ -12,9 +12,10 @@ typedef struct dispatcher_t {
 	int uniform;
 	long fingerprint;
 	long packets;
+	int M;
 } dispatcher;
 
-dispatcher *init_dispatcher(int, worker **, PacketSource_t, int);
+dispatcher *init_dispatcher(int, worker **, PacketSource_t, int, int M);
 
 void *execute_dispatcher(void *);
 

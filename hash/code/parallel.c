@@ -15,15 +15,13 @@
 result *parallel_firewall(int log_threads, int numSources, long mean, short experimentNumber, int M, int H) {
 	int lock_type = MUTX;
 	int strategy = LFRE;
-	int numPackets = 0;
 	int uniformFlag = UNIFORM;
 
 	hash_table *t = ht_init(H, TABLE, MAX_BUCKET_SIZE);
-	ht_free(t);
 
 	worker **workers = malloc(numSources * sizeof(worker *));
 	for(int i = 0; i < numSources; i++) {
-		workers[i] = init_worker(numPackets, Q_SIZE, strategy, t);
+		workers[i] = init_worker(0, Q_SIZE, strategy, t);
 		workers[i]->slot = init_slot(lock_type);
 		workers[i]->queue->l = init_lock(lock_type, &numSources);
 	}
@@ -35,7 +33,7 @@ result *parallel_firewall(int log_threads, int numSources, long mean, short expe
 	}
 
 	PacketSource_t *pks = createPacketSource(mean, numSources, experimentNumber);
-	dispatcher *d = init_dispatcher(numSources, workers, *pks, uniformFlag);
+	dispatcher *d = init_dispatcher(numSources, workers, *pks, uniformFlag, M);
 
 	for(int i = 0; i < numSources; i++) {
 		pthread_t tid;
