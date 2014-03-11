@@ -180,6 +180,11 @@ int ht_resize(hash_table *t) {
 	return(success);
 }
 
+/**
+ * Return false if duplicate key found
+ *
+ * Caller is responsible for duplicate resources
+ */
 int ht_add(hash_table *t, int key, packet *elem) {
 	int success = 1;
 	int index = key & t->mask;
@@ -193,19 +198,21 @@ int ht_add(hash_table *t, int key, packet *elem) {
 		default:
 			break;
 	}
-	add_list((serial_list *) t->buckets[index], key, elem);
+	success = !contains_list((serial_list *) t->buckets[index], key);
+	if(success) {
+		add_list((serial_list *) t->buckets[index], key, elem);
+		switch(t->heur) {
+			case TABLE:
+				t->size += 1;
+				break;
+			default:
+				break;
+		}
+	}
 	switch(t->type) {
 		case LOCKING:
 			locking_b = t->b;
 			pthread_rwlock_unlock(&locking_b->locks[index % locking_b->len]);
-			break;
-		default:
-			break;
-	}
-
-	switch(t->heur) {
-		case TABLE:
-			t->size += 1;
 			break;
 		default:
 			break;
