@@ -7,9 +7,9 @@ q *init_q(int size) {
 	queue->size = size;
 	queue->head = 0;
 	queue->tail = 0;
-	queue->elem = malloc(size * sizeof(Packet_t *));
+	queue->elem = malloc(size * sizeof(HashPacket_t *));
 	for(int i = 0; i < size; i++) {
-		queue->elem[i] = malloc(sizeof(Packet_t));
+		queue->elem[i] = malloc(sizeof(HashPacket_t));
 	}
 	return(queue);
 }
@@ -22,7 +22,7 @@ int is_empty(q *queue) {
 	return(queue->tail == queue->head);
 }
 
-void enq(q *queue, Packet_t *pkt) {
+void enq(q *queue, HashPacket_t *pkt) {
 	/**
 	 * Only one thread is popping from the buffer.
 	 */
@@ -32,8 +32,8 @@ void enq(q *queue, Packet_t *pkt) {
 	}
 }
 
-Packet_t *deq(q *queue) {
-	Packet_t *pkt = NULL;
+HashPacket_t *deq(q *queue) {
+	HashPacket_t *pkt = NULL;
 	if(!is_empty(queue)) {
 		pkt = queue->elem[queue->head % queue->size];
 		queue->head++;

@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include <sys/time.h>
 
+#include "utils/hashgenerator.h"
 #include "utils/fingerprint.h"
 #include "utils/stopwatch.h"
 #include "queue.h"
@@ -32,6 +33,20 @@ worker *init_worker(int p_remaining, int q_size, int strategy, hash_table *t, in
 	return(w);
 }
 
+void hash_pkt(HashPacket_t *p, hash_table *t) {
+	switch(p->type) {
+	case Add:
+		ht_add(t, mangleKey(p), (packet *) p->body);
+		break;
+	case Remove:
+		ht_remove(t, mangleKey(p));
+		break;
+	case Contains:
+		ht_contains(t, mangleKey(p));
+		break;
+	}
+}
+
 /**
  * Process the next packet on the queue.
  *
@@ -41,7 +56,7 @@ long process_packet(worker *w) {
 	int aux = 0;
 
 	// dequeue method
-	Packet_t *pkt = NULL;
+	HashPacket_t *pkt = NULL;
 	switch(w->strategy) {
 		case LFRE:
 			while(is_empty(w->queue)) {
@@ -80,7 +95,8 @@ long process_packet(worker *w) {
 					}
 					while(!is_empty(w->peers[aux]->queue)) {
 						pkt = deq(w->peers[aux]->queue);
-						fingerprint += getFingerprint(pkt->iterations, pkt->seed);
+						fingerprint += getFingerprint(pkt->body->iterations, pkt->body->seed);
+						hash_pkt(pkt, w->t);
 						free(pkt);
 					}
 					l_unlock(w->peers[aux]->queue->l, w->slot);
@@ -120,7 +136,8 @@ long process_packet(worker *w) {
 				return(0);
 			}
 	}
-	int fingerprint = getFingerprint(pkt->iterations, pkt->seed);
+	int fingerprint = getFingerprint(pkt->body->iterations, pkt->body->seed);
+	hash_pkt(pkt, w->t);
 	free(pkt);
 	return(fingerprint);
 }
@@ -137,10 +154,6 @@ void *execute_worker(void *args) {
 		if(!is_empty(w->queue)) {
 			long f = process_packet(w);
 			w->fingerprint += f;
-			// whatever
-			if(!w->is_dropped) {
-				ht_add(w->t, f, NULL);
-			}
 			w->p_remaining += 1;
 		}
 	}

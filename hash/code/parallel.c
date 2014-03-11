@@ -1,3 +1,7 @@
+/**
+ * This is NOT used in project 4 -- cf. utils/hashpackettest.c for the actual implementation
+ */
+
 #include <pthread.h>
 
 #include <stdio.h>
@@ -10,9 +14,11 @@
 #include "tune.h"
 #include "hash.h"
 
+#include "utils/hashgenerator.h"
+
 #include "parallel.h"
 
-result *parallel_firewall(int log_threads, int numSources, long mean, short experimentNumber, int M, int H, int is_dropped) {
+result *parallel_firewall(int log_threads, int numSources, long mean, short experimentNumber, int M, int H, int is_dropped, float plus, float minus, float rate) {
 	int lock_type = MUTX;
 	int strategy = LFRE;
 	int uniformFlag = UNIFORM;
@@ -32,7 +38,7 @@ result *parallel_firewall(int log_threads, int numSources, long mean, short expe
 		workers[i]->num_peers = numSources;
 	}
 
-	PacketSource_t *pks = createPacketSource(mean, numSources, experimentNumber);
+	HashPacketGenerator_t *pks = createHashPacketGenerator(plus, minus, rate, mean);
 	dispatcher *d = init_dispatcher(numSources, workers, *pks, uniformFlag, M);
 
 	for(int i = 0; i < numSources; i++) {

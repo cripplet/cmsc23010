@@ -97,7 +97,7 @@ result *serialHashPacketTest(int numMilliseconds, float fractionAdd, float fract
 	return(r);
 }
 
-result *parallelHashPacketTest(int numMilliseconds, float fractionAdd, float fractionRemove, float hitRate, int maxBucketSize, long mean, int initSize, int numWorkers, int log_threads, int M, int H, int is_dropped)
+result *parallelHashPacketTest(int numMilliseconds, float fractionAdd, float fractionRemove, float hitRate, int maxBucketSize, long mean, int initSize, int numWorkers, int log_threads, int H, int M, int is_dropped)
 {
 	int numSources = numWorkers;
 	StopWatch_t timer;
@@ -123,7 +123,7 @@ result *parallelHashPacketTest(int numMilliseconds, float fractionAdd, float fra
 	}
 
 	// TODO -- fix this
-	PacketSource_t *pks = createPacketSource(mean, numSources, 0);
+	HashPacketGenerator_t *pks = createHashPacketGenerator(fractionAdd, fractionRemove, hitRate, mean);
 	dispatcher *d = init_dispatcher(numSources, workers, *pks, uniformFlag, M);
 
 	for(int i = 0; i < numSources; i++) {
@@ -151,6 +151,7 @@ result *parallelHashPacketTest(int numMilliseconds, float fractionAdd, float fra
 	// what we actually want to analyze
 	r->packets = d->packets;
 	r->fingerprint = d->fingerprint;
+	r->time = getElapsedTime(&timer);
 
 	for(int i = 0; i < numSources; i++) {
 		free(workers[i]->slot);
