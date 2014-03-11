@@ -18,7 +18,8 @@ int main(int argc, char **argv) {
 		case TEST:
 			fprintf(stderr, "running tests\n");
 			int success = (
-				test_hash(LOCKING)
+				test_hash(LOCKING) &
+				test_hash(LOCKFREEC)
 			);
 			fprintf(stderr, "test results: %s\n", success ? "PASS" : "FAIL");
 			return(!success);

@@ -11,7 +11,7 @@ typedef Item_t item;
 
 typedef struct hash_table_t {
 	/* Locking structures */
-	int type;			// designates the table TYPE (LOCKING, LOCKFREE, LINEAR, AWESOME)
+	int type;			// designates the table TYPE (LOCKING, LOCKFREEC, LINEAR, AWESOME)
 	void *b;			// the specific blob of the hash table with type = TYPE
 
 	/* Hash table sizing */

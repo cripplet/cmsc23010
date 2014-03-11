@@ -5,7 +5,7 @@
 
 /* Hash table types */
 #define LOCKING 1
-#define LOCKFREE 2
+#define LOCKFREEC 2
 #define LINEAR 4
 #define AWESOME 8
 

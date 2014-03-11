@@ -104,6 +104,10 @@ int test_serial_duplicate_add(hash_table *t, packet_source *p) {
 	// ensure that all duplicate keys are not added
 	add_packets(t, p, ATTEMPTS, offset);
 	success &= (t->size == ATTEMPTS + offset);
+
+	for(int i = 0; i < ATTEMPTS + offset; i++) {
+		success &= ht_contains(t, i);
+	}
 	return(success);
 }
 
@@ -126,7 +130,9 @@ int test_parallel_duplicate_add(hash_table *t, packet_source *p) {
 		pthread_detach(tid);
 	}
 
-	while(b->is_done < THREADS);
+	while(b->is_done < THREADS) {
+		sched_yield();
+	}
 	int result = b->resource;
 
 	free(b);

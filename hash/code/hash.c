@@ -15,8 +15,11 @@ typedef struct locking_blob_t {
 	pthread_rwlock_t *locks;
 } locking_blob;
 
-typedef struct lockfree_blob_t {
-} lockfree_blob;
+typedef struct lockfreec_blob_t {
+	int len;
+	pthread_mutex_t *locks;
+	pthread_mutexattr_t *attrs;
+} lockfreec_blob;
 
 typedef struct linear_blob_t {
 } linear_blob;
@@ -35,8 +38,28 @@ locking_blob *ht_locking_blob_init(int log_threads) {
 	return(b);
 }
 
+lockfreec_blob *ht_lockfreec_blob_init(int log_threads) {
+	lockfreec_blob *b = malloc(sizeof(lockfreec_blob));
+	b->len = log_threads;
+	b->locks = malloc(log_threads * sizeof(pthread_mutex_t));
+	b->attrs = malloc(log_threads * sizeof(pthread_mutexattr_t));
+	/* Set reentrant locks */
+	for(int i = 0; i < log_threads; i++) {
+		pthread_mutexattr_init(&b->attrs[i]);
+		pthread_mutexattr_settype(&b->attrs[i], PTHREAD_MUTEX_RECURSIVE);
+		pthread_mutex_init(&b->locks[i], &b->attrs[i]);
+	}
+	return(b);
+}
+
 void ht_locking_blob_free(locking_blob *b) {
 	free(b->locks);
+	free(b);
+}
+
+void ht_lockfreec_blob_free(lockfreec_blob *b) {
+	free(b->locks);
+	free(b->attrs);
 	free(b);
 }
 
@@ -71,6 +94,9 @@ hash_table *ht_init(int type, int heur, int log_threads) {
 		case LOCKING:
 			t->b = ht_locking_blob_init(log_threads);
 			break;
+		case LOCKFREEC:
+			t->b = ht_lockfreec_blob_init(log_threads);
+			break;
 		default:
 			t->b = NULL;
 			break;
@@ -89,6 +115,9 @@ void ht_free(hash_table *t) {
 	switch(t->type) {
 		case LOCKING:
 			ht_locking_blob_free((locking_blob *) t->b);
+			break;
+		case LOCKFREEC:
+			ht_lockfreec_blob_free((lockfreec_blob *) t->b);
 			break;
 		default:
 			break;
@@ -112,6 +141,7 @@ int ht_is_full(hash_table *t) {
 			break;
 		default:
 			size = 0;
+			break;
 	}
 
 	return(t->max_s < size);
@@ -120,6 +150,7 @@ int ht_is_full(hash_table *t) {
 int ht_resize(hash_table *t) {
 	int success = 1;
 	locking_blob *locking_b;
+	lockfreec_blob *lockfreec_b;
 
 	int old_length = t->len;
 
@@ -131,6 +162,11 @@ int ht_resize(hash_table *t) {
 				pthread_rwlock_wrlock(&locking_b->locks[i]);
 			}
 			break;
+		case LOCKFREEC:
+			lockfreec_b = t->b;
+			for(int i = 0; i < lockfreec_b->len; i++) {
+				pthread_mutex_lock(&lockfreec_b->locks[i]);
+			}
 		default:
 			break;
 	}
@@ -159,7 +195,6 @@ int ht_resize(hash_table *t) {
 		for(int i = 0; i < t->len; i++) {
 			free((serial_list *) t->buckets[i]);
 		}
-
 		free(t->buckets);
 
 		t->buckets = t_buckets;
@@ -185,6 +220,12 @@ int ht_resize(hash_table *t) {
 				pthread_rwlock_unlock(&locking_b->locks[i]);
 			}
 			break;
+		case LOCKFREEC:
+			lockfreec_b = t->b;
+			for(int i = 0; i < lockfreec_b->len; i++) {
+				pthread_mutex_unlock(&lockfreec_b->locks[i]);
+			}
+			break;
 		default:
 			break;
 	}
@@ -201,9 +242,12 @@ int ht_add(hash_table *t, int key, packet *elem) {
 	int success = 0;
 
 	locking_blob *locking_b;
+	lockfreec_blob *lockfreec_b;
+
 	int index = key & t->mask;
 
 	// resize table if necessary
+	// TODO -- Fix concurrency problems
 	while(ht_is_full(t)) {
 		success &= ht_resize(t);
 	}
@@ -212,6 +256,10 @@ int ht_add(hash_table *t, int key, packet *elem) {
 		case LOCKING:
 			locking_b = t->b;
 			pthread_rwlock_wrlock(&locking_b->locks[index % locking_b->len]);
+			break;
+		case LOCKFREEC:
+			lockfreec_b = t->b;
+			pthread_mutex_lock(&lockfreec_b->locks[index % lockfreec_b->len]);
 			break;
 		default:
 			break;
@@ -233,6 +281,10 @@ int ht_add(hash_table *t, int key, packet *elem) {
 			locking_b = t->b;
 			pthread_rwlock_unlock(&locking_b->locks[index % locking_b->len]);
 			break;
+		case LOCKFREEC:
+			lockfreec_b = t->b;
+			pthread_mutex_unlock(&lockfreec_b->locks[index % lockfreec_b->len]);
+			break;
 		default:
 			break;
 	}
@@ -244,6 +296,7 @@ int ht_remove(hash_table *t, int key) {
 	int success = 0;
 	int index = key & t->mask;
 	locking_blob *locking_b;
+	lockfreec_blob *lockfreec_b;
 
 	if((index & t->mask) >= t->len) {
 		return(success);
@@ -253,6 +306,10 @@ int ht_remove(hash_table *t, int key) {
 		case LOCKING:
 			locking_b = t->b;
 			pthread_rwlock_wrlock(&locking_b->locks[index % locking_b->len]);
+			break;
+		case LOCKFREEC:
+			lockfreec_b = t->b;
+			pthread_mutex_lock(&lockfreec_b->locks[index % lockfreec_b->len]);
 			break;
 		default:
 			break;
@@ -271,6 +328,10 @@ int ht_remove(hash_table *t, int key) {
 		case LOCKING:
 			locking_b = t->b;
 			pthread_rwlock_unlock(&locking_b->locks[index % locking_b->len]);
+			break;
+		case LOCKFREEC:
+			lockfreec_b = t->b;
+			pthread_mutex_unlock(&lockfreec_b->locks[index % lockfreec_b->len]);
 			break;
 		default:
 			break;
