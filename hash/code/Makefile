@@ -9,7 +9,7 @@ OBJECTS=$(SOURCES:.c=.o)
 STABLE=hash
 DEV=hash_dev
 
-all: $(SOURCES) $(STABLE) $(DEV)
+all: clean $(SOURCES) $(STABLE) $(DEV)
 
 $(STABLE): $(OBJECTS)
 	$(CC) $(CFLAGS) $(OBJECTS) -o $@ $(LIBS)
@@ -17,8 +17,8 @@ $(STABLE): $(OBJECTS)
 $(DEV): $(OBJECTS)
 	$(CC) $(DEV_CFLAGS) $(OBJECTS) -o $@ $(LIBS)
 
-test: clean $(STABLE)
-	valgrind --leak-check=full ./$(STABLE) 0
+test: clean $(DEV)
+	valgrind --leak-check=full ./$(DEV) 0
 
 run: clean $(STABLE)
 	./$(STABLE) $(EXPR)

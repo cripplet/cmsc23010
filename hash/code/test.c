@@ -12,7 +12,7 @@
 
 #define ATTEMPTS 100000
 #define THREADS 8
-#define LOG_THREADS 2
+#define LOG_THREADS 4
 #define WORK 1000
 
 typedef struct test_blob_t {
@@ -58,14 +58,22 @@ int test_parallel_duplicate_add(hash_table *t, packet_source *p);
 void *parallel_add(void *args);
 
 int test_hash(int type) {
+	int result = 1;
 	packet_source *p = createPacketSource(WORK, THREADS, 0);
-	hash_table *t = ht_init(type, TABLE, LOG_THREADS);
-	int result = (
-		test_serial_add(t, p) &
-		test_serial_duplicate_add(t, p) &
-		test_serial_del(t) &
-		test_serial_resize(t, p)
-	);
+
+	hash_table *t;
+
+	t = ht_init(type, TABLE, LOG_THREADS);
+	result &= test_serial_add(t, p);
+	result &= test_serial_del(t);
+	ht_free(t);
+
+	t = ht_init(type, TABLE, LOG_THREADS);
+	result &= test_serial_resize(t, p);
+	ht_free(t);
+
+	t = ht_init(type, TABLE, LOG_THREADS);
+	result &= test_serial_duplicate_add(t, p);
 	ht_free(t);
 
 	t = ht_init(type, TABLE, LOG_THREADS);
@@ -81,8 +89,22 @@ int test_serial_add(hash_table *t, packet_source *p) {
 	return(ht_contains(t, 0));
 }
 int test_serial_duplicate_add(hash_table *t, packet_source *p) {
+	int success = 1;
 	add_packets(t, p, 1, 0);
-	return(!ht_add(t, 0, NULL));
+	success &= !ht_add(t, 0, NULL);
+	ht_remove(t, 0);
+	success &= !ht_contains(t, 0);
+
+	// add initial packets
+	add_packets(t, p, ATTEMPTS, 0);
+	success &= (t->size == ATTEMPTS);
+
+	int offset = 10;
+
+	// ensure that all duplicate keys are not added
+	add_packets(t, p, ATTEMPTS, offset);
+	success &= (t->size == ATTEMPTS + offset);
+	return(success);
 }
 
 int test_serial_del(hash_table *t) {
@@ -92,7 +114,7 @@ int test_serial_del(hash_table *t) {
 
 int test_serial_resize(hash_table *t, packet_source *p) {
 	int len = t->len;
-	int key = add_packets(t, p,  t->len << 1, 0) - 1;
+	int key = add_packets(t, p,  t->max_s << 1, 0) - 1;
 	return(ht_contains(t, key) & (t->len == len << 1));
 }
 

@@ -23,6 +23,9 @@ typedef struct hash_table_t {
 	/* Hash table struct */
 	volatile int len;		// the number of buckets
 	volatile serial_list **buckets;	// the actual hash table
+
+
+	pthread_rwlock_t lock;
 } hash_table;
 
 /* Memory allocation */
