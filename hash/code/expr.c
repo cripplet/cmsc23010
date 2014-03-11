@@ -33,4 +33,16 @@ void custom() {
 	fprintf(stderr, "%li packets in %f milliseconds\n", r->packets, r->time);
 	free(b);
 	free(r);
+
+	b = init_signal_blob(1);
+	r = parallelHashPacketTest(2000, .10, .10, .90, MAX_BUCKET_SIZE, MEAN_WORK, 0, THREADS, LOG_THREADS, LOCKFREEC, TWO_SECONDS, !drop);
+	fprintf(stderr, "%li packets in %f milliseconds\n", r->packets, r->time);
+	free(b);
+	free(r);
+
+	b = init_signal_blob(1);
+	r = parallelHashPacketTest(2000, .10, .10, .90, MAX_BUCKET_SIZE, MEAN_WORK, 0, THREADS, LOG_THREADS, LOCKFREEC, TWO_SECONDS, drop);
+	fprintf(stderr, "%li packets in %f milliseconds\n", r->packets, r->time);
+	free(b);
+	free(r);
 }
