@@ -7,5 +7,6 @@ result *init_result() {
 	r->time = 0;
 	r->folded_time = 0;
 	r->fingerprint = 0;
+	r->packets = 0;
 	return(r);
 }

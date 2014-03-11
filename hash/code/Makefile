@@ -21,7 +21,7 @@ test: clean $(DEV)
 	valgrind --leak-check=full ./$(DEV) 0
 
 run: clean $(STABLE)
-	./$(STABLE) 0
+	./$(STABLE) 1
 
 clean:
 	rm -f $(STABLE) $(DEV) *.o *.tsv *.log

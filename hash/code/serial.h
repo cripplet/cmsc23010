@@ -3,6 +3,6 @@
 
 #include "result.h"
 
-result *serial_firewall(const int, const int, const long, const int, const short);
+result *serial_firewall(int log_threads, int numSources, long mean, short experimentNumber, int M);
 
 #endif
