@@ -517,7 +517,7 @@ int ht_remove(hash_table *t, int key) {
 		}
 	} else {
 		if(success) {
-			// free((packet *) t->elems[(index + offset) % t->len]->value);
+			free((packet *) t->elems[(index + offset) % t->len]->value);
 			t->elems[(index + offset) % t->len]->key = 0;
 			t->elems[(index + offset) % t->len]->value = NULL;
 			t->size -= 1;
@@ -625,6 +625,6 @@ void serial_list_free(serial_list *l) {
 }
 
 void linear_element_free(linear_element *elem) {
-	// free((packet *) elem->value);
+	free((packet *) elem->value);
 	free(elem);
 }

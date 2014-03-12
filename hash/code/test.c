@@ -10,7 +10,7 @@
 
 #include "test.h"
 
-#define ATTEMPTS 1000000
+#define ATTEMPTS 100000
 #define THREADS 8
 #define LOG_THREADS 4
 #define WORK 1000
