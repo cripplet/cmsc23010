@@ -9,20 +9,27 @@ typedef Packet_t packet;
 typedef SerialList_t serial_list;
 typedef Item_t item;
 
+typedef struct linear_element_t {
+	int offset;
+	int key;
+	volatile packet *value;
+} linear_element;
+
 typedef struct hash_table_t {
 	/* Locking structures */
-	int type;			// designates the table TYPE (LOCKING, LOCKFREEC, LINEAR, AWESOME)
-	void *b;			// the specific blob of the hash table with type = TYPE
+	int type;				// designates the table TYPE (LOCKING, LOCKFREEC, LINEAR, AWESOME)
+	void *b;				// the specific blob of the hash table with type = TYPE
 
 	/* Hash table sizing */
-	int heur;			// designates the heuristic type that the hash table will employ to determine if it is full
-	volatile int size;		// current size of the hash table
-	volatile int max_s;		// maximum size metric of the hash table
+	int heur;				// designates the heuristic type that the hash table will employ to determine if it is full
+	volatile int size;			// current size of the hash table
+	volatile int max_s;			// maximum size metric of the hash table
 	volatile int mask;
 
 	/* Hash table struct */
-	volatile int len;		// the number of buckets
-	volatile serial_list **buckets;	// the actual hash table
+	volatile int len;			// the number of buckets
+	volatile serial_list **buckets;		// the actual hash table
+	volatile linear_element **elems;	// hash table for linear-probe
 } hash_table;
 
 /* Memory allocation */

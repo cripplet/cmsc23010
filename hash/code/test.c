@@ -10,7 +10,7 @@
 
 #include "test.h"
 
-#define ATTEMPTS 100000
+#define ATTEMPTS 1000000
 #define THREADS 8
 #define LOG_THREADS 4
 #define WORK 1000
@@ -118,7 +118,7 @@ int test_serial_del(hash_table *t) {
 
 int test_serial_resize(hash_table *t, packet_source *p) {
 	int len = t->len;
-	int key = add_packets(t, p,  t->max_s << 1, 0) - 1;
+	int key = add_packets(t, p, t->max_s << 1, 0) - 1;
 	return(ht_contains(t, key) & (t->len == len << 1));
 }
 

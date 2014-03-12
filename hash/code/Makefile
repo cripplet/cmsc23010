@@ -18,7 +18,7 @@ $(DEV): $(OBJECTS)
 	$(CC) $(DEV_CFLAGS) $(OBJECTS) -o $@ $(LIBS)
 
 test: clean $(DEV)
-	valgrind --leak-check=full ./$(DEV) 0
+	valgrind ./$(DEV) 0
 
 run: clean $(STABLE)
 	./$(STABLE) 1

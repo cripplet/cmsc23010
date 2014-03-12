@@ -19,7 +19,8 @@ int main(int argc, char **argv) {
 			fprintf(stderr, "running tests\n");
 			int success = (
 				test_hash(LOCKING) &
-				test_hash(LOCKFREEC)
+				test_hash(LOCKFREEC) &
+				test_hash(LINEAR)
 			);
 			fprintf(stderr, "test results: %s\n", success ? "PASS" : "FAIL");
 			return(!success);
