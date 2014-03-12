@@ -469,8 +469,7 @@ int ht_remove(hash_table *t, int key) {
 			linear_b = t->b;
 			// for(offset = t->elems[index]->offset; offset < t->len; offset++) {
 			for(offset = 0; offset < t->len; offset++) {
-				int lock_index = (index + offset) % t->len;
-				pthread_mutex_lock(&linear_b->locks[lock_index]);
+				pthread_mutex_lock(&linear_b->locks[(index + offset) % linear_b->len]);
 				// unlock if not a match
 				if(!t->elems[(index + offset) % t->len]->value || (t->elems[(index + offset) % t->len]->key != key)) {
 					pthread_mutex_unlock(&linear_b->locks[(index + offset) % linear_b->len]);
