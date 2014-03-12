@@ -72,14 +72,6 @@ void ht_linear_blob_free(linear_blob *b) {
 	free(b);
 }
 
-linear_element *linear_element_init() {
-	linear_element *elem = malloc(sizeof(linear_element));
-	elem->key = 0;
-	elem->offset = 0;
-	elem->value = NULL;
-	return(elem);
-}
-
 /* Auxiliary function headers */
 void serial_list_free(serial_list *l);
 void linear_element_free(linear_element *elem);
@@ -94,10 +86,7 @@ hash_table *ht_init(int type, int heur, int log_threads) {
 	t->len = log_threads;
 	switch(type) {
 		case LINEAR:
-			t->elems = malloc(log_threads * sizeof(linear_element *));
-			for(int i = 0; i < log_threads; i++) {
-				t->elems[i] = linear_element_init();
-			}
+			t->elems = calloc(log_threads, sizeof(linear_element));
 			break;
 		case LOCKING:
 		case LOCKFREEC:
@@ -160,9 +149,9 @@ void ht_free(hash_table *t) {
 	switch(t->type) {
 		case LINEAR:
 			for(int i = 0; i < t->len; i++) {
-				linear_element_free((linear_element *) t->elems[i]);
+				free((packet *) t->elems[i].value);
 			}
-			free(t->elems);
+			free((linear_element *) t->elems);
 			break;
 		default:
 			/* Hash table freeing */
@@ -258,27 +247,21 @@ int ht_attempt_resize(hash_table *t) {
 			free(t->buckets);
 			t->buckets = t_buckets;
 		} else {
-			volatile linear_element **t_elems = malloc(t_len * sizeof(linear_element *));
-			for(int i = 0; i < t_len; i++) {
-				t_elems[i] = linear_element_init();
-			}
+			volatile linear_element *t_elems = calloc(t_len, sizeof(linear_element));
 			for(int i = 0; i < t->len; i++) {
-				if(t->elems[i]->value) {
-					int index = t->elems[i]->key & t_mask;
+				if(t->elems[i].value) {
+					int index = t->elems[i].key & t_mask;
 					for(int offset = 0; offset < t_len;  offset++) {
-						if(!t_elems[(index + offset) % t_len]->value) {
-							t_elems[index % t_len]->offset = (t_elems[index % t_len]->offset > offset) ? t_elems[index % t_len]->offset : offset;
-							t_elems[(index + offset) % t_len]->key = t->elems[i]->key;
-							t_elems[(index + offset) % t_len]->value = t->elems[i]->value;
+						if(!t_elems[(index + offset) % t_len].value) {
+							t_elems[index % t_len].offset = (t_elems[index % t_len].offset > offset) ? t_elems[index % t_len].offset : offset;
+							t_elems[(index + offset) % t_len].key = t->elems[i].key;
+							t_elems[(index + offset) % t_len].value = t->elems[i].value;
 							break;
 						}
 					}
 				}
 			}
-			for(int i = 0; i < t->len; i++) {
-				linear_element_free((linear_element *) t->elems[i]);
-			}
-			free(t->elems);
+			free((linear_element *) t->elems);
 			t->elems = t_elems;
 		}
 
@@ -348,6 +331,7 @@ int ht_add(hash_table *t, int key, packet *elem) {
 
 	int old_len = t->len;
 	int index = key & t->mask;
+	int lock_index = 0;
 
 	switch(t->type) {
 		case LOCKING:
@@ -360,20 +344,25 @@ int ht_add(hash_table *t, int key, packet *elem) {
 			break;
 		case LINEAR:
 			linear_b = t->b;
-			// for(offset = t->elems[index]->offset; offset < t->len; offset++) {
-			for(offset = 0; offset < t->len; offset++) {
-				pthread_mutex_lock(&linear_b->locks[(index + offset) % linear_b->len]);
+			for(offset = t->elems[index].offset; offset < t->len; offset++) {
+				lock_index = (index + offset) % linear_b->len;
+				pthread_mutex_lock(&linear_b->locks[lock_index]);
 				// unlock if the potential spot is occupied
-				if(t->elems[(index + offset) % t->len]->value) {
-					pthread_mutex_unlock(&linear_b->locks[(index + offset) % linear_b->len]);
+				if(t->elems[(index + offset) % t->len].value) {
+					pthread_mutex_unlock(&linear_b->locks[lock_index]);
 					// return if duplicate key found -- this is guaranteed to happen if a duplicate exists
-					if(t->elems[(index + offset) % t->len]->key == key) {
+					if(t->elems[(index + offset) % t->len].key == key) {
 						return(success);
 					}
 				} else {
+					success = 1;
 					break;
 				}
 			}
+			if(!success) {
+				return(success);
+			}
+
 		default:
 			break;
 	}
@@ -389,7 +378,7 @@ int ht_add(hash_table *t, int key, packet *elem) {
 				break;
 			case LINEAR:
 				linear_b = t->b;
-				pthread_mutex_unlock(&linear_b->locks[(index + offset) % linear_b->len]);
+				pthread_mutex_unlock(&linear_b->locks[lock_index]);
 				break;
 			default:
 				break;
@@ -413,10 +402,10 @@ int ht_add(hash_table *t, int key, packet *elem) {
 			}
 		}
 	} else {
-		t->elems[(index + offset) % t->len]->key = key;
-		t->elems[(index + offset) % t->len]->value = elem;
+		t->elems[(index + offset) % t->len].key = key;
+		t->elems[(index + offset) % t->len].value = elem;
 		// note that the offset can ONLY grow -- as such, it is a MINIMUM starting point for all searches (and thus, does NOT need to be locked)
-		t->elems[index % t->len]->offset = (t->elems[index % t->len]->offset > offset) ? t->elems[index % t->len]->offset : offset;
+		t->elems[index % t->len].offset = (t->elems[index % t->len].offset > offset) ? t->elems[index % t->len].offset : offset;
 		t->size += 1;
 		success |= 1;
 	}
@@ -431,7 +420,7 @@ int ht_add(hash_table *t, int key, packet *elem) {
 			break;
 		case LINEAR:
 			linear_b = t->b;
-			pthread_mutex_unlock(&linear_b->locks[(index + offset) % linear_b->len]);
+			pthread_mutex_unlock(&linear_b->locks[lock_index]);
 			break;
 		default:
 			break;
@@ -452,6 +441,8 @@ int ht_remove(hash_table *t, int key) {
 	lockfreec_blob *lockfreec_b;
 	linear_blob *linear_b;
 
+	int lock_index = 0;
+
 	int offset = 0;
 
 	int old_len = t->len;
@@ -467,17 +458,24 @@ int ht_remove(hash_table *t, int key) {
 			break;
 		case LINEAR:
 			linear_b = t->b;
-			// for(offset = t->elems[index]->offset; offset < t->len; offset++) {
-			for(offset = 0; offset < t->len; offset++) {
-				pthread_mutex_lock(&linear_b->locks[(index + offset) % linear_b->len]);
-				// unlock if not a match
-				if(!t->elems[(index + offset) % t->len]->value || (t->elems[(index + offset) % t->len]->key != key)) {
-					pthread_mutex_unlock(&linear_b->locks[(index + offset) % linear_b->len]);
-				} else {
-					success |= 1;
-					break;
+			for(offset = t->elems[index].offset; offset < t->len + t->elems[index].offset; offset++) {
+				// find the element
+				if(t->elems[(index + offset) % t->len].value && (t->elems[(index + offset) % t->len].key == key)) {
+					lock_index = (index + offset) % linear_b->len;
+					pthread_mutex_lock(&linear_b->locks[lock_index]);
+					// unlock if someone got here first
+					if(!t->elems[(index + offset) % t->len].value || (t->elems[(index + offset) % t->len].key != key)) {
+						pthread_mutex_unlock(&linear_b->locks[lock_index]);
+					} else {
+						success = 1;
+						break;
+					}
 				}
 			}
+			if(!success) {
+				return(success);
+			}
+
 		default:
 			break;
 	}
@@ -493,7 +491,7 @@ int ht_remove(hash_table *t, int key) {
 				break;
 			case LINEAR:
 				linear_b = t->b;
-				pthread_mutex_unlock(&linear_b->locks[(index + offset) % linear_b->len]);
+				pthread_mutex_unlock(&linear_b->locks[lock_index]);
 				break;
 			default:
 				break;
@@ -501,7 +499,7 @@ int ht_remove(hash_table *t, int key) {
 		return(ht_remove(t, key));
 	}
 	if(t->type != LINEAR) {
-		success |= remove_list((serial_list *) t->buckets[index], key);
+		success = remove_list((serial_list *) t->buckets[index], key);
 		if(success) {
 			switch(t->heur) {
 				case TABLE:
@@ -516,9 +514,9 @@ int ht_remove(hash_table *t, int key) {
 		}
 	} else {
 		if(success) {
-			free((packet *) t->elems[(index + offset) % t->len]->value);
-			t->elems[(index + offset) % t->len]->key = 0;
-			t->elems[(index + offset) % t->len]->value = NULL;
+			free((packet *) t->elems[(index + offset) % t->len].value);
+			t->elems[(index + offset) % t->len].key = 0;
+			t->elems[(index + offset) % t->len].value = NULL;
 			t->size -= 1;
 		}
 	}
@@ -533,7 +531,7 @@ int ht_remove(hash_table *t, int key) {
 			break;
 		case LINEAR:
 			linear_b = t->b;
-			pthread_mutex_unlock(&linear_b->locks[(index + offset) % linear_b->len]);
+			pthread_mutex_unlock(&linear_b->locks[lock_index]);
 			break;
 		default:
 			break;
@@ -547,6 +545,8 @@ int ht_contains(hash_table *t, int key) {
 	int index = key & t->mask;
 	locking_blob *locking_b;
 	linear_blob *linear_b;
+
+	int lock_index = 0;
 
 	int offset = 0;
 
@@ -563,16 +563,20 @@ int ht_contains(hash_table *t, int key) {
 			break;
 		case LINEAR:
 			linear_b = t->b;
-			// for(offset = t->elems[index]->offset; offset < t->len; offset++) {
-			for(offset = 0; offset < t->len; offset++) {
-				pthread_mutex_lock(&linear_b->locks[(index + offset) % linear_b->len]);
-				// unlock if the potential spot is occupied
-				if(!t->elems[(index + offset) % t->len]->value || (t->elems[(index + offset) % t->len]->key != key)) {
-					pthread_mutex_unlock(&linear_b->locks[(index + offset) % linear_b->len]);
-				} else {
-					success |= 1;
-					break;
+			for(offset = t->elems[index].offset; offset < t->len; offset++) {
+				if(t->elems[(index + offset) % t->len].value && (t->elems[(index + offset) % t->len].key == key)) {
+					lock_index = (index + offset) % linear_b->len;
+					pthread_mutex_lock(&linear_b->locks[lock_index]);
+					if(!t->elems[(index + offset) % t->len].value || (t->elems[(index + offset) % t->len].key != key)) {
+						pthread_mutex_unlock(&linear_b->locks[lock_index]);
+					} else {
+						success = 1;
+						break;
+					}
 				}
+			}
+			if(!success) {
+				return(success);
 			}
 		default:
 			break;
@@ -585,7 +589,7 @@ int ht_contains(hash_table *t, int key) {
 				break;
 			case LINEAR:
 				linear_b = t->b;
-				pthread_mutex_unlock(&linear_b->locks[(index + offset) % linear_b->len]);
+				pthread_mutex_unlock(&linear_b->locks[lock_index]);
 				break;
 			default:
 				break;
@@ -603,7 +607,7 @@ int ht_contains(hash_table *t, int key) {
 			break;
 		case LINEAR:
 			linear_b = t->b;
-			pthread_mutex_unlock(&linear_b->locks[(index + offset) % linear_b->len]);
+			pthread_mutex_unlock(&linear_b->locks[lock_index]);
 			break;
 		default:
 			break;
@@ -621,9 +625,4 @@ void serial_list_free(serial_list *l) {
 		i = temp;
 	}
 	free(l);
-}
-
-void linear_element_free(linear_element *elem) {
-	free((packet *) elem->value);
-	free(elem);
 }

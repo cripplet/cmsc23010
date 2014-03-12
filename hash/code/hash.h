@@ -29,7 +29,7 @@ typedef struct hash_table_t {
 	/* Hash table struct */
 	volatile int len;			// the number of buckets
 	volatile serial_list **buckets;		// the actual hash table
-	volatile linear_element **elems;	// hash table for linear-probe
+	volatile linear_element *elems;		// hash table for linear-probe
 } hash_table;
 
 /* Memory allocation */

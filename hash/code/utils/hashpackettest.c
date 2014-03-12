@@ -91,6 +91,9 @@ result *serialHashPacketTest(int numMilliseconds, float fractionAdd, float fract
 
 	long totalCount = workerData.totalPackets;
 
+	free(source);
+	free(table);
+
 	result *r = init_result();
 	r->packets = totalCount;
 	r->time = getElapsedTime(&timer);
@@ -122,7 +125,6 @@ result *parallelHashPacketTest(int numMilliseconds, float fractionAdd, float fra
 		workers[i]->num_peers = numSources;
 	}
 
-	// TODO -- fix this
 	HashPacketGenerator_t *pks = createHashPacketGenerator(fractionAdd, fractionRemove, hitRate, mean);
 	dispatcher *d = init_dispatcher(numSources, workers, *pks, uniformFlag, M);
 
@@ -161,6 +163,8 @@ result *parallelHashPacketTest(int numMilliseconds, float fractionAdd, float fra
 		free(workers[i]);
 	}
 	free(workers);
+
+	ht_free(t);
 
 	return(r);
 }
