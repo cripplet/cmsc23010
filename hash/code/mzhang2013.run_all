@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# cf. http://bit.ly/1idISBJ
+
+CD="/home/mzhang2013/courses/cmsc23010/cmsc23010/hash/code"
+
+bash $CD/run_all.sh

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CD="/home/mzhang2013/courses/cmsc23010/cmsc23010/locks/code"
+CD="/home/mzhang2013/courses/cmsc23010/cmsc23010/hash/code"
 
 cd $CD
 
