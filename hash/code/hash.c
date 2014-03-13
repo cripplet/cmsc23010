@@ -148,16 +148,16 @@ void ht_free(hash_table *t) {
 
 	switch(t->type) {
 		case LINEAR:
-			for(int i = 0; i < t->len; i++) {
-				free((packet *) t->elems[i].value);
-			}
+			// for(int i = 0; i < t->len; i++) {
+				// free((packet *) t->elems[i].value);
+			// }
 			free((linear_element *) t->elems);
 			break;
 		default:
 			/* Hash table freeing */
-			for(int i = 0; i < t->len; i++) {
-				serial_list_free((serial_list *) t->buckets[i]);
-			}
+			// for(int i = 0; i < t->len; i++) {
+				// serial_list_free((serial_list *) t->buckets[i]);
+			// }
 			free(t->buckets);
 			break;
 	}
@@ -241,10 +241,10 @@ int ht_attempt_resize(hash_table *t) {
 			}
 
 			/* Free old hash table */
-			for(int i = 0; i < t->len; i++) {
+			// for(int i = 0; i < t->len; i++) {
 				// free((serial_list *) t->buckets[i]);
-			}
-			// free(t->buckets);
+			// }
+			free(t->buckets);
 			t->buckets = t_buckets;
 		} else {
 			volatile linear_element *t_elems = calloc(t_len, sizeof(linear_element));
@@ -621,7 +621,7 @@ void serial_list_free(serial_list *l) {
 	item *temp;
 	while(i != NULL) {
 		temp = i->next;
-		free((packet *) i->value);
+		// free((packet *) i->value);
 		free(i);
 		i = temp;
 	}
