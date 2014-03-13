@@ -7,9 +7,9 @@ cd $CD
 # make clean
 # make
 
-./hash 1 > $CD/ONE.tsv
-./hash 2 > $CD/TWO.tsv
-./hash 3 0 > $CD/THREE.tsv
+./hash 1 >> $CD/ONE.tsv
+./hash 2 >> $CD/TWO.tsv
+./hash 3 0 >> $CD/THREE.tsv
 ./hash 3 1 >> $CD/THREE.tsv
 ./hash 3 2 >> $CD/THREE.tsv
 ./hash 3 3 >> $CD/THREE.tsv
