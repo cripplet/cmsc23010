@@ -52,7 +52,7 @@ bool remove_list(SerialList_t * list, int key){
 	else if (curr->key == key){
 		Item_t * temp = curr;
 		list->head = list->head->next;
-		free((Packet_t *) temp->value);
+		// free((Packet_t *) temp->value);
 		free(temp);
 		list->size--;
 		return true;
@@ -61,7 +61,7 @@ bool remove_list(SerialList_t * list, int key){
 			if(curr->next->key == key){
 				Item_t * temp = curr->next;
 				curr->next = curr->next->next;
-				free((Packet_t *) temp->value);
+				// free((Packet_t *) temp->value);
 				free(temp);
 				list->size--;
 				return true;

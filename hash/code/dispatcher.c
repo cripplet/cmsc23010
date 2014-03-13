@@ -30,7 +30,7 @@ void *execute_dispatcher(void *args) {
 	signal(SIGALRM, ALARM_handler_counter);
 	alarm(d->M);
 
-	while(done < d->sources) {
+	while(b->flags) {
 		done = 0;
 		for(int i = 0; i < d->sources; i++) {
 			// skip over full worker queues and constantly checks for work to be done

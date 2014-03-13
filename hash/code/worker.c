@@ -35,7 +35,6 @@ worker *init_worker(int p_remaining, int q_size, int strategy, hash_table *t, in
 
 void hash_pkt(HashPacket_t *p, hash_table *t, int is_dropped) {
 	if(is_dropped) {
-		free(p);
 		return;
 	}
 	switch(p->type) {
@@ -49,7 +48,6 @@ void hash_pkt(HashPacket_t *p, hash_table *t, int is_dropped) {
 		ht_contains(t, mangleKey(p));
 		break;
 	}
-	free(p);
 }
 
 /**
@@ -139,6 +137,9 @@ long process_packet(worker *w) {
 			if(pkt == NULL) {
 				return(0);
 			}
+	}
+	if(pkt == NULL) {
+		return(0);
 	}
 	int fingerprint = getFingerprint(pkt->body->iterations, pkt->body->seed);
 	hash_pkt(pkt, w->t, w->is_dropped);

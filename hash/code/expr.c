@@ -29,6 +29,7 @@ void custom() {
 		for(int drop_status = 0; drop_status < 2; drop_status++) {
 			b = init_signal_blob(1);
 			r = parallelHashPacketTest(2000, .10, .10, .90, MAX_BUCKET_SIZE, MEAN_WORK, 0, THREADS, LOG_THREADS, table_type, TWO_SECONDS, drop_status);
+
 			fprintf(stderr, "P -- type == %i, drop == %i, %li packets in %f milliseconds\n", table_type, drop_status, r->packets, r->time);
 			free(b);
 			free(r);
