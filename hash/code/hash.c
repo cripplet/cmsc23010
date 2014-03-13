@@ -109,7 +109,7 @@ hash_table *ht_init(int type, int heur, int log_threads) {
 			break;
 	}
 	if(type == LINEAR) {
-		t->max_s = log_threads;
+		t->max_s = log_threads * 0.5;
 	}
 
 	switch(type) {
@@ -442,9 +442,7 @@ int ht_remove(hash_table *t, int key) {
 	linear_blob *linear_b;
 
 	int lock_index = 0;
-
 	int offset = 0;
-
 	int old_len = t->len;
 
 	switch(t->type) {
