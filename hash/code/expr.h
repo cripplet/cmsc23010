@@ -22,7 +22,7 @@
 
 #define THREADS 4
 #define LOG_THREADS 2
-#define MEAN_WORK 1000
+#define MEAN_WORK 4000
 #define TWO_SECONDS 2
 
 void custom();
