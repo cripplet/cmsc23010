@@ -26,5 +26,8 @@
 #define TWO_SECONDS 2
 
 void custom();
+void one();
+void two();
+void three();
 
 #endif

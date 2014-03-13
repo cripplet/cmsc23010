@@ -1,7 +1,12 @@
 #ifndef TYPE_H
 #define TYPE_H
 
+/* Run modes */
 #define TEST 0
+#define CUSTOM 4
+#define ONE 1
+#define TWO 2
+#define THREE 3
 
 /* Hash table types */
 #define LOCKING 1

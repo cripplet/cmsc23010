@@ -24,9 +24,9 @@ int main(int argc, char **argv) {
 			);
 			fprintf(stderr, "test results: %s\n", success ? "PASS" : "FAIL");
 			return(!success);
+		case CUSTOM:
+			custom();
+			break;
 	}
-
-	custom();
-
 	return(0);
 }

@@ -21,7 +21,7 @@ test: clean $(DEV)
 	valgrind ./$(DEV) 0
 
 run: clean $(STABLE)
-	./$(STABLE) 1
+	./$(STABLE) 4
 
 clean:
 	rm -f $(STABLE) $(DEV) *.o *.tsv *.log

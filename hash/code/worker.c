@@ -33,7 +33,11 @@ worker *init_worker(int p_remaining, int q_size, int strategy, hash_table *t, in
 	return(w);
 }
 
-void hash_pkt(HashPacket_t *p, hash_table *t) {
+void hash_pkt(HashPacket_t *p, hash_table *t, int is_dropped) {
+	if(is_dropped) {
+		free(p);
+		return;
+	}
 	switch(p->type) {
 	case Add:
 		ht_add(t, mangleKey(p), (packet *) p->body);
@@ -45,6 +49,7 @@ void hash_pkt(HashPacket_t *p, hash_table *t) {
 		ht_contains(t, mangleKey(p));
 		break;
 	}
+	free(p);
 }
 
 /**
@@ -96,8 +101,7 @@ long process_packet(worker *w) {
 					while(!is_empty(w->peers[aux]->queue)) {
 						pkt = deq(w->peers[aux]->queue);
 						fingerprint += getFingerprint(pkt->body->iterations, pkt->body->seed);
-						hash_pkt(pkt, w->t);
-						free(pkt);
+						hash_pkt(pkt, w->t, w->is_dropped);
 					}
 					l_unlock(w->peers[aux]->queue->l, w->slot);
 					return(fingerprint);
@@ -137,8 +141,7 @@ long process_packet(worker *w) {
 			}
 	}
 	int fingerprint = getFingerprint(pkt->body->iterations, pkt->body->seed);
-	hash_pkt(pkt, w->t);
-	free(pkt);
+	hash_pkt(pkt, w->t, w->is_dropped);
 	return(fingerprint);
 }
 
