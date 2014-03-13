@@ -29,5 +29,6 @@ void custom();
 void one();
 void two();
 void three();
+void three_aux(float hit_rate, int log_threads);
 
 #endif

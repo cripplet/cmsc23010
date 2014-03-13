@@ -9,10 +9,12 @@
 int main(int argc, char **argv) {
 	int mode = TEST;
 	int log_threads = 1;
+	float hit_rate = 0;
 	if(argc >= 2) {
 		mode = atoi(argv[1]);
 		if(mode == THREE) {
 			log_threads = atoi(argv[2]);
+			hit_rate = atoi(argv[3]);
 		}
 	} else {
 		return(0);
@@ -38,7 +40,7 @@ int main(int argc, char **argv) {
 			two();
 			break;
 		case THREE:
-			three(log_threads);
+			three_aux(hit_rate, log_threads);
 			break;
 	}
 	return(0);
