@@ -1,0 +1,2128 @@
+rm -f main io.o main.o test.o utils.o stopwatch.o fw.o log.txt output_data/*
+gcc -Wall -Werror -O3 -std=c99   -c -o io.o io.c
+gcc -Wall -Werror -O3 -std=c99   -c -o main.o main.c
+gcc -Wall -Werror -O3 -std=c99   -c -o test.o test.c
+gcc -Wall -Werror -O3 -std=c99   -c -o utils.o utils.c
+gcc -Wall -Werror -O3 -std=c99   -c -o stopwatch.o stopwatch.c
+gcc -Wall -Werror -O3 -std=c99   -c -o fw.o fw.c
+gcc -pthread io.o main.o test.o utils.o stopwatch.o fw.o -o main
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.
+main: Array loaded into memory.
+main: Executing algorithm for the specified number of threads.
+main: Finished execution -- writing to output file.
+main: Exiting program.

@@ -27,6 +27,9 @@ SerialList_t * createSerialListWithItem(int key, volatile Packet_t * value)
 }
 
 Item_t * getItem_list(SerialList_t * list, int key){
+	if(list == NULL) {
+		return NULL;
+	}
 	Item_t * curr = list->head;
 
 	while(curr != NULL){
